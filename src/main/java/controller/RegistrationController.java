@@ -23,12 +23,11 @@ public class RegistrationController {
                 handleRegistration();
             }
         });
-        
+
         this.registrationView.addBackToLoginListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 mainController.showLoginView();
-                
             }
         });
     }
@@ -37,14 +36,49 @@ public class RegistrationController {
         String newUsername = registrationView.getUsername();
         String newPassword = registrationView.getPassword();
 
+        // Clear previous error messages
+        registrationView.clearErrors();
+
+        boolean isValid = true;
+
+        // Validate username
+        if (newUsername.length() < 4) {
+            registrationView.setUsernameError("Username must be longer than 4 characters.");
+            isValid = false;
+        } else if (!Character.isLetter(newUsername.charAt(0))) {
+            registrationView.setUsernameError("Username must start with a letter.");
+            isValid = false;
+        } else if (!newUsername.matches("[A-Za-z0-9]+")) {
+            registrationView.setUsernameError("Username can only contain letters and numbers.");
+            isValid = false;
+        }
+
+        // Validate password
+        if (newPassword.length() < 8) {
+            registrationView.setPasswordError("Password must be at least 8 characters long.");
+            isValid = false;
+        } else if (!newPassword.matches(".*\\d.*")) {
+            registrationView.setPasswordError("Password must include at least one number.");
+            isValid = false;
+        } else if (!newPassword.matches(".*[A-Z].*")) {
+            registrationView.setPasswordError("Password must include at least one uppercase letter.");
+            isValid = false;
+        } else if (!newPassword.matches(".*[!@#$%^&*(),.?\":{}|<>].*")) {
+            registrationView.setPasswordError("Password must include at least one special character.");
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return; // Stop registration if validation fails
+        }
+
         try {
             // Save the new user to the database
             DatabaseHelper.registerUser(newUsername, newPassword);
             mainController.showLoginView();
-
         } catch (Exception ex) {
             ex.printStackTrace();
-            System.out.println("Registration failed!");
+            registrationView.setUsernameError("Registration failed! Please try again.");
         }
     }
 }

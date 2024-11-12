@@ -82,10 +82,10 @@ public class RegistrationView {
         usernameField.setFont(new Font("Inter", Font.PLAIN, 14));
         panel.add(usernameField);
 
-        // Username error label
+        // Username error label with wider bounds and HTML wrapping
         usernameErrorLabel = new JLabel("");
         usernameErrorLabel.setForeground(Color.RED);
-        usernameErrorLabel.setBounds(150, 110, 200, 20);
+        usernameErrorLabel.setBounds(150, 110, 230, 30); // Increased width
         usernameErrorLabel.setFont(new Font("Inter", Font.PLAIN, 12));
         panel.add(usernameErrorLabel);
 
@@ -101,10 +101,10 @@ public class RegistrationView {
         passwordField.setFont(new Font("Inter", Font.PLAIN, 14));
         panel.add(passwordField);
 
-        // Password error label
+        // Password error label with wider bounds and HTML wrapping
         passwordErrorLabel = new JLabel("");
         passwordErrorLabel.setForeground(Color.RED);
-        passwordErrorLabel.setBounds(150, 170, 200, 20);
+        passwordErrorLabel.setBounds(150, 170, 230, 30); // Increased width
         passwordErrorLabel.setFont(new Font("Inter", Font.PLAIN, 12));
         panel.add(passwordErrorLabel);
 
@@ -166,13 +166,13 @@ public class RegistrationView {
         backToLoginLabel.addMouseListener(listener);
     }
 
-    // Methods to set error messages
+    // Methods to set error messages with HTML for wrapping
     public void setUsernameError(String message) {
-        usernameErrorLabel.setText(message);
+        usernameErrorLabel.setText("<html>" + message + "</html>");
     }
 
     public void setPasswordError(String message) {
-        passwordErrorLabel.setText(message);
+        passwordErrorLabel.setText("<html>" + message + "</html>");
     }
 
     public void clearErrors() {
