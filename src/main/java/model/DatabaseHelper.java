@@ -15,8 +15,20 @@ public class DatabaseHelper {
                 // Create table for users
                 stmt.execute("CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, password TEXT)");
 
-                // Create table for job applications
-                stmt.execute("CREATE TABLE IF NOT EXISTS job_applications (company_name TEXT, position TEXT, date_applied DATE)");
+                // Create table for job applications with the specified columns
+                stmt.execute("CREATE TABLE IF NOT EXISTS job_applications (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "position TEXT, " +
+                        "company_name TEXT, " +
+                        "salary_approximation REAL, " +
+                        "location TEXT, " +
+                        "status TEXT, " + 
+                        "date_saved DATE, " +
+                        "deadline DATE, " +
+                        "date_applied DATE, " +
+                        "follow_up DATE, " +
+                        "excitement INTEGER)");
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,6 +85,27 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             e.printStackTrace();
             return false; // Registration failed due to an exception
+        }
+    }
+    // Add a new job application to the database
+    public static void addJobApplication(JobApplication job) throws SQLException {
+        String sql = "INSERT INTO job_applications(position, company_name, salary_approximation, location, status, " +
+                "date_saved, deadline, date_applied, follow_up, excitement) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = SQLiteConnection.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, job.getPosition());
+            pstmt.setString(2, job.getCompanyName());
+            pstmt.setDouble(3, job.getSalaryApproximation());
+            pstmt.setString(4, job.getLocation());
+            pstmt.setString(5, job.getStatus());
+            pstmt.setDate(6, job.getDateSaved());
+            pstmt.setDate(7, job.getDeadline());
+            pstmt.setDate(8, job.getDateApplied());
+            pstmt.setDate(9, job.getFollowUpDate());
+            pstmt.setInt(10, job.getExcitement());
+
+            pstmt.executeUpdate();
         }
     }
 }
