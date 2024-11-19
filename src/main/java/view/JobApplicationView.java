@@ -133,4 +133,7 @@ public class JobApplicationView {
     public void disposeView() {
         frame.dispose();
     }
+    public JFrame getFrame(){
+        return this.frame;
+    }
 }

@@ -6,7 +6,10 @@ import view.JobApplicationView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class JobApplicationController {
@@ -39,7 +42,7 @@ public class JobApplicationController {
     }
 
     // Load job applications from the database and display them in the view
-    private void loadJobApplications() {
+    public void loadJobApplications() {
         try {
             List<JobApplication> applications = DatabaseHelper.getAllJobApplications();
             jobView.displayJobApplications(applications);
@@ -51,10 +54,9 @@ public class JobApplicationController {
 
     // Handle adding a new job application
     private void handleAddJobApplication() {
-        // Logic to open a form to add a new job application
-        // After adding the application, refresh the table
-        loadJobApplications();
+        mainController.showAddJobApplication();
     }
+
 
     // Handle editing the selected job application
     private void handleEditJobApplication() {
