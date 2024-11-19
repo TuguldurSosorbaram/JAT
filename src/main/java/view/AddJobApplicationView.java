@@ -88,11 +88,11 @@ public class AddJobApplicationView {
         return companyNameField.getText();
     }
 
-    public Double getSalaryApproximation() {
+    public int getSalaryApproximation() {
         try {
-            return Double.parseDouble(salaryApproxField.getText());
+            return Integer.parseInt(salaryApproxField.getText());
         } catch (NumberFormatException e) {
-            return null;
+            return 0;
         }
     }
 

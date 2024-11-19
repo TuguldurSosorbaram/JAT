@@ -99,7 +99,7 @@ public class JobApplicationView {
         JobApplication job = new JobApplication();
         job.setPosition((String) tableModel.getValueAt(row, 0));
         job.setCompanyName((String) tableModel.getValueAt(row, 1));
-        job.setSalaryApproximation((tableModel.getValueAt(row, 2) instanceof Double) ? (Double) tableModel.getValueAt(row, 2) : null);
+        job.setSalaryApproximation((int) tableModel.getValueAt(row, 2));
         job.setLocation((String) tableModel.getValueAt(row, 3));
         job.setStatus((String) tableModel.getValueAt(row, 4));
         job.setDateSaved((java.sql.Date) tableModel.getValueAt(row, 5));

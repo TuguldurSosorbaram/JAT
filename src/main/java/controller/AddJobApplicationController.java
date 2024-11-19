@@ -23,7 +23,6 @@ public class AddJobApplicationController {
         addJobView.addSaveButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("SAVE");
                 handleSaveJobApplication();
             }
         });
@@ -32,7 +31,6 @@ public class AddJobApplicationController {
         addJobView.addCancelButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("CANCELLL");
                 addJobView.disposeView();
             }
         });

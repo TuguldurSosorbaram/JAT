@@ -22,7 +22,7 @@ public class DatabaseHelper {
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "position TEXT, " +
                         "company_name TEXT, " +
-                        "salary_approximation REAL, " +
+                        "salary_approximation INTEGER, " +
                         "location TEXT, " +
                         "status TEXT, " + 
                         "date_saved DATE, " +
@@ -98,7 +98,7 @@ public class DatabaseHelper {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, job.getPosition());
             pstmt.setString(2, job.getCompanyName());
-            pstmt.setDouble(3, job.getSalaryApproximation());
+            pstmt.setInt(3, job.getSalaryApproximation());
             pstmt.setString(4, job.getLocation());
             pstmt.setString(5, job.getStatus());
             pstmt.setDate(6, job.getDateSaved());
@@ -123,7 +123,7 @@ public class DatabaseHelper {
                 job.setId(rs.getInt("id"));
                 job.setPosition(rs.getString("position"));
                 job.setCompanyName(rs.getString("company_name"));
-                job.setSalaryApproximation(rs.getDouble("salary_approximation"));
+                job.setSalaryApproximation(rs.getInt("salary_approximation"));
                 job.setLocation(rs.getString("location"));
                 job.setStatus(rs.getString("status"));
                 job.setDateSaved(rs.getDate("date_saved"));
@@ -147,7 +147,7 @@ public class DatabaseHelper {
 
             pstmt.setString(1, job.getPosition());
             pstmt.setString(2, job.getCompanyName());
-            pstmt.setDouble(3, job.getSalaryApproximation());
+            pstmt.setInt(3, job.getSalaryApproximation());
             pstmt.setString(4, job.getLocation());
             pstmt.setString(5, job.getStatus());
             pstmt.setDate(6, job.getDateSaved());

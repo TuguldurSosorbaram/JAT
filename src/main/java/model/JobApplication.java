@@ -6,7 +6,7 @@ public class JobApplication {
     private int id;
     private String position;
     private String companyName;
-    private double salaryApproximation;  // Approximated salary as a numeric value
+    private int salaryApproximation;  // Approximated salary as a numeric value
     private String location;
     private String status;  // Can be represented as an Enum if you prefer a specific set of status values
     private Date dateSaved;
@@ -19,7 +19,7 @@ public class JobApplication {
     public JobApplication(){
         this.position = "";
         this.companyName = "";
-        this.salaryApproximation = 0.0;
+        this.salaryApproximation = 0;
         this.location = "";
         this.status = "";
         this.dateSaved = null;
@@ -28,7 +28,7 @@ public class JobApplication {
         this.followUpDate = null;
         setExcitement(0);  // Ensures excitement is within range
     }
-    public JobApplication(String position, String companyName, double salaryApproximation, String location,
+    public JobApplication(String position, String companyName, int salaryApproximation, String location,
                           String status, Date dateSaved, Date deadline, Date dateApplied, Date followUpDate,
                           int excitement) {
         this.position = position;
@@ -67,11 +67,11 @@ public class JobApplication {
         this.companyName = companyName;
     }
 
-    public double getSalaryApproximation() {
+    public int getSalaryApproximation() {
         return salaryApproximation;
     }
 
-    public void setSalaryApproximation(double salaryApproximation) {
+    public void setSalaryApproximation(int salaryApproximation) {
         this.salaryApproximation = salaryApproximation;
     }
 
