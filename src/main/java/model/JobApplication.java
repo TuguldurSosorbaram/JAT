@@ -3,6 +3,7 @@ package model;
 import java.sql.Date;
 
 public class JobApplication {
+    private int id;
     private String position;
     private String companyName;
     private double salaryApproximation;  // Approximated salary as a numeric value
@@ -14,7 +15,19 @@ public class JobApplication {
     private Date followUpDate;
     private int excitement;  // Should be a value between 1 and 5
 
-    // Constructor to initialize all fields
+    // Constructor
+    public JobApplication(){
+        this.position = "";
+        this.companyName = "";
+        this.salaryApproximation = 0.0;
+        this.location = "";
+        this.status = "";
+        this.dateSaved = null;
+        this.deadline = null;
+        this.dateApplied = null;
+        this.followUpDate = null;
+        setExcitement(0);  // Ensures excitement is within range
+    }
     public JobApplication(String position, String companyName, double salaryApproximation, String location,
                           String status, Date dateSaved, Date deadline, Date dateApplied, Date followUpDate,
                           int excitement) {
@@ -31,6 +44,13 @@ public class JobApplication {
     }
 
     // Getters and Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getPosition() {
         return position;
     }
@@ -108,9 +128,9 @@ public class JobApplication {
     }
 
     public void setExcitement(int excitement) {
-        // Ensuring excitement rating is between 1 and 5
-        if (excitement < 1 || excitement > 5) {
-            throw new IllegalArgumentException("Excitement rating must be between 1 and 5.");
+        // Ensuring excitement rating is between 0 and 5
+        if (excitement < 0 || excitement > 5) {
+            throw new IllegalArgumentException("Excitement rating must be between 0 and 5.");
         }
         this.excitement = excitement;
     }

@@ -1,6 +1,8 @@
 package model;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import utils.SQLiteConnection;
 
 public class DatabaseHelper {
@@ -108,4 +110,57 @@ public class DatabaseHelper {
             pstmt.executeUpdate();
         }
     }
+    public static List<JobApplication> getAllJobApplications() {
+        List<JobApplication> applications = new ArrayList<>();
+        String sql = "SELECT * FROM job_applications";
+
+        try (Connection conn = SQLiteConnection.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                JobApplication job = new JobApplication();
+                job.setId(rs.getInt("id"));
+                job.setPosition(rs.getString("position"));
+                job.setCompanyName(rs.getString("company_name"));
+                job.setSalaryApproximation(rs.getDouble("salary_approximation"));
+                job.setLocation(rs.getString("location"));
+                job.setStatus(rs.getString("status"));
+                job.setDateSaved(rs.getDate("date_saved"));
+                job.setDeadline(rs.getDate("deadline"));
+                job.setDateApplied(rs.getDate("date_applied"));
+                job.setFollowUpDate(rs.getDate("follow_up"));
+                job.setExcitement(rs.getInt("excitement"));
+                applications.add(job);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return applications;
+    }
+    public static void updateJobApplication(JobApplication job) {
+        String sql = "UPDATE job_applications SET position = ?, company_name = ?, salary_approximation = ?, location = ?, status = ?, " +
+                     "date_saved = ?, deadline = ?, date_applied = ?, follow_up = ?, excitement = ? WHERE id = ?";
+
+        try (Connection conn = SQLiteConnection.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, job.getPosition());
+            pstmt.setString(2, job.getCompanyName());
+            pstmt.setDouble(3, job.getSalaryApproximation());
+            pstmt.setString(4, job.getLocation());
+            pstmt.setString(5, job.getStatus());
+            pstmt.setDate(6, job.getDateSaved());
+            pstmt.setDate(7, job.getDeadline());
+            pstmt.setDate(8, job.getDateApplied());
+            pstmt.setDate(9, job.getFollowUpDate());
+            pstmt.setInt(10, job.getExcitement());
+            pstmt.setInt(11, job.getId()); // Assuming the ID is used for identifying the record
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

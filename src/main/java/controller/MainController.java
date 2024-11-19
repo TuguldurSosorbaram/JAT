@@ -46,7 +46,7 @@ public class MainController {
 
         // Create the job application view and controller
         jobApplicationView = new JobApplicationView();
-        jobApplicationController = new JobApplicationController(jobApplicationView);
+        jobApplicationController = new JobApplicationController(jobApplicationView, this);
         jobApplicationView.showView();
     }
 

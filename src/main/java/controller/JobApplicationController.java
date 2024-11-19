@@ -6,33 +6,67 @@ import view.JobApplicationView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 public class JobApplicationController {
     private JobApplicationView jobView;
+    private MainController mainController;
 
-    public JobApplicationController(JobApplicationView jobView) {
+    public JobApplicationController(JobApplicationView jobView, MainController mainController) {
         this.jobView = jobView;
+        this.mainController = mainController;
+
+        // Display all job applications on startup
+        loadJobApplications();
 
         // Add action listener for the Add Job button
         this.jobView.addAddButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //handleAddJobApplication();
+                // Handle adding a new job application
+                handleAddJobApplication();
+            }
+        });
+
+        // Add action listener for the Edit Job button
+        this.jobView.addEditButtonListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleEditJobApplication();
             }
         });
     }
 
-//    private void handleAddJobApplication() {
-//        // Dummy code for adding a job
-//        JobApplication newJob = new JobApplication("Dummy Company", "Software Engineer", new Date());
-//        try {
-//            DatabaseHelper.addJobApplication(newJob);
-//            List<JobApplication> applications = DatabaseHelper.getAllApplications();
-//            jobView.displayJobApplications(applications);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//    }
+    // Load job applications from the database and display them in the view
+    private void loadJobApplications() {
+        try {
+            List<JobApplication> applications = DatabaseHelper.getAllJobApplications();
+            jobView.displayJobApplications(applications);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error loading job applications.");
+        }
+    }
+
+    // Handle adding a new job application
+    private void handleAddJobApplication() {
+        // Logic to open a form to add a new job application
+        // After adding the application, refresh the table
+        loadJobApplications();
+    }
+
+    // Handle editing the selected job application
+    private void handleEditJobApplication() {
+        int selectedRow = jobView.getSelectedRow();
+        if (selectedRow >= 0) {
+            // Logic to edit the selected job application
+            JobApplication job = jobView.getJobApplicationFromRow(selectedRow);
+            // After editing, update the database and refresh the table
+            DatabaseHelper.updateJobApplication(job);
+            loadJobApplications();
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select a job application to edit.");
+        }
+    }
 }

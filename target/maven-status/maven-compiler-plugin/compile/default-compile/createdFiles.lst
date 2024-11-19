@@ -7,12 +7,15 @@ controller\JobApplicationController$1.class
 controller\MainController.class
 controller\AuthenticationController.class
 view\LoginView.class
+view\JobApplicationView$1.class
 view\JobApplicationView.class
 view\LoginView$1.class
 view\RegistrationView.class
+controller\JobApplicationController$2.class
 com\sutu\jobtracker\jat\JAT.class
 controller\JobApplicationController.class
 view\RegistrationView$1.class
+view\JobApplicationView$2.class
 model\User.class
 controller\RegistrationController$2.class
 controller\RegistrationController.class
