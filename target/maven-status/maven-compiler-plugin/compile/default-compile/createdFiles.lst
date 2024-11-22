@@ -5,6 +5,7 @@ controller\MainViewController.class
 controller\AddJobApplicationController$1.class
 controller\MainController.class
 controller\AuthenticationController.class
+controller\EditJobApplicationController.class
 view\LoginView$1.class
 view\RegistrationView.class
 view\AddJobApplicationView.class
@@ -15,6 +16,7 @@ model\JobApplication.class
 utils\SQLiteConnection.class
 controller\AddJobApplicationController$2.class
 controller\MainViewController$2.class
+view\EditJobApplicationView.class
 view\LoginView.class
 controller\AddJobApplicationController.class
 com\sutu\jobtracker\jat\JAT.class

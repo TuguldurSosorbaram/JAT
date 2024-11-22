@@ -1,7 +1,9 @@
 C:\Users\sutu0\Desktop\JAT\src\main\java\model\User.java
 C:\Users\sutu0\Desktop\JAT\src\main\java\controller\AddJobApplicationController.java
 C:\Users\sutu0\Desktop\JAT\src\main\java\controller\MainViewController.java
+C:\Users\sutu0\Desktop\JAT\src\main\java\controller\EditJobApplicationController.java
 C:\Users\sutu0\Desktop\JAT\src\main\java\view\AddJobApplicationView.java
+C:\Users\sutu0\Desktop\JAT\src\main\java\view\EditJobApplicationView.java
 C:\Users\sutu0\Desktop\JAT\src\main\java\view\LoginView.java
 C:\Users\sutu0\Desktop\JAT\src\main\java\com\sutu\jobtracker\jat\JAT.java
 C:\Users\sutu0\Desktop\JAT\src\main\java\model\DatabaseHelper.java

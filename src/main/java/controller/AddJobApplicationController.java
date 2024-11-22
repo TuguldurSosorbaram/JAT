@@ -31,7 +31,7 @@ public class AddJobApplicationController {
         addJobView.addCancelButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                addJobView.disposeView();
+                AddJobApplicationController.this.mainController.disposeAddView();
             }
         });
     }
@@ -51,7 +51,7 @@ public class AddJobApplicationController {
 
         try {
             DatabaseHelper.addJobApplication(newJob); // Save to database
-            mainController.disposeAddView(); // Close the add form
+            this.mainController.disposeAddView(); // Close the add form
         } catch (SQLException ex) {
             Logger.getLogger(AddJobApplicationController.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Error saving job application.");

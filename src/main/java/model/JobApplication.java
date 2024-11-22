@@ -9,10 +9,10 @@ public class JobApplication {
     private int salaryApproximation;  // Approximated salary as a numeric value
     private String location;
     private String status;  // Can be represented as an Enum if you prefer a specific set of status values
-    private Date dateSaved;
-    private Date deadline;
-    private Date dateApplied;
-    private Date followUpDate;
+    private java.sql.Date dateSaved;
+    private java.sql.Date deadline;
+    private java.sql.Date dateApplied;
+    private java.sql.Date followUpDate;
     private int excitement;  // Should be a value between 1 and 5
 
     // Constructor
@@ -29,8 +29,8 @@ public class JobApplication {
         setExcitement(0);  // Ensures excitement is within range
     }
     public JobApplication(String position, String companyName, int salaryApproximation, String location,
-                          String status, Date dateSaved, Date deadline, Date dateApplied, Date followUpDate,
-                          int excitement) {
+                          String status, java.sql.Date dateSaved, java.sql.Date deadline, 
+                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement) {
         this.position = position;
         this.companyName = companyName;
         this.salaryApproximation = salaryApproximation;

@@ -1,10 +1,12 @@
 package controller;
 
 import javax.swing.JOptionPane;
+import model.JobApplication;
 import view.MainView;
 import view.LoginView;
 import view.RegistrationView;
 import view.AddJobApplicationView;
+import view.EditJobApplicationView;
 
 
 public class MainController {
@@ -19,6 +21,9 @@ public class MainController {
     
     private AddJobApplicationView addJAView;
     private AddJobApplicationController addJAController;
+    
+    private EditJobApplicationView editView;
+    private EditJobApplicationController editJAController;
 
     // Constructor initializes the main flow by showing the login view
     public MainController() {
@@ -60,7 +65,13 @@ public class MainController {
         
         addJAController = new AddJobApplicationController(addJAView, this);
         addJAView.showView();
+    }
+    
+    public void showEditJobApplication(JobApplication job){
+        editView = new EditJobApplicationView(mainView.getFrame());
         
+        editJAController = new EditJobApplicationController(this, editView, job );
+        editView.showView();
     }
 
     // Helper method to dispose of the current view if it exists
@@ -91,6 +102,15 @@ public class MainController {
         }
         mainViewController.loadJobApplications();
     }
+    public void disposeEditView(){
+        if (editView != null) {
+                editView.disposeView();
+                editView = null;
+                editJAController = null;
+            }
+        mainViewController.loadJobApplications();
+    }
+    
 
     // Additional utility methods like logging errors or notifications
     protected void showError(String message) {

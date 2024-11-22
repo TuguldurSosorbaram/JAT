@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
+import view.EditJobApplicationView;
 
 public class MainViewController {
     private MainView mainView;
@@ -59,7 +60,8 @@ public class MainViewController {
     private void handleEditJobApplication() {
         int selectedRow = mainView.getSelectedRow();
         if (selectedRow >= 0) {
-            loadJobApplications();
+            JobApplication selectedJob = mainView.getSelectedJobApplication();
+            mainController.showEditJobApplication(selectedJob);
         } else {
             JOptionPane.showMessageDialog(null, "Please select a job application to edit.");
         }
