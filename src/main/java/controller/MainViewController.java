@@ -42,7 +42,7 @@ public class MainViewController {
     public void loadJobApplications() {
         try {
             List<JobApplication> applications = DatabaseHelper.getAllJobApplications();
-            mainView.displayJobApplications(applications);
+            mainView.setJobApplications(applications);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error loading job applications.");
@@ -59,10 +59,6 @@ public class MainViewController {
     private void handleEditJobApplication() {
         int selectedRow = mainView.getSelectedRow();
         if (selectedRow >= 0) {
-            // Logic to edit the selected job application
-            JobApplication job = mainView.getJobApplicationFromRow(selectedRow);
-            // After editing, update the database and refresh the table
-            DatabaseHelper.updateJobApplication(job);
             loadJobApplications();
         } else {
             JOptionPane.showMessageDialog(null, "Please select a job application to edit.");
