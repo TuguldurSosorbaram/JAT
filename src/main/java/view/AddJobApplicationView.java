@@ -3,7 +3,9 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.Date;
+import javax.swing.text.NumberFormatter;
 
 public class AddJobApplicationView {
     private JDialog dialog;
@@ -28,7 +30,15 @@ public class AddJobApplicationView {
         // Input fields
         positionField = new JTextField();
         companyNameField = new JTextField();
-        salaryApproxField = new JTextField();
+        
+        NumberFormat format = NumberFormat.getIntegerInstance();
+        format.setGroupingUsed(false); // Disable thousand separators
+        NumberFormatter formatter = new NumberFormatter(format);
+        formatter.setValueClass(Integer.class);
+        formatter.setAllowsInvalid(false); // Prevent invalid input
+        formatter.setMinimum(0); // Optional: restrict to non-negative numbers
+        salaryApproxField = new JFormattedTextField(formatter);
+        
         locationField = new JTextField();
         statusComboBox = new JComboBox<>(new String[]{"Applied", "Interview", "Offer", "Rejected"}); // Example statuses
 

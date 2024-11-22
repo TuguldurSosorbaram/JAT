@@ -2,29 +2,26 @@ package controller;
 
 import model.JobApplication;
 import model.DatabaseHelper;
-import view.JobApplicationView;
+import view.MainView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class JobApplicationController {
-    private JobApplicationView jobView;
+public class MainViewController {
+    private MainView mainView;
     private MainController mainController;
 
-    public JobApplicationController(JobApplicationView jobView, MainController mainController) {
-        this.jobView = jobView;
+    public MainViewController(MainView mainView, MainController mainController) {
+        this.mainView = mainView;
         this.mainController = mainController;
 
         // Display all job applications on startup
         loadJobApplications();
 
         // Add action listener for the Add Job button
-        this.jobView.addAddButtonListener(new ActionListener() {
+        this.mainView.addAddButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle adding a new job application
@@ -33,7 +30,7 @@ public class JobApplicationController {
         });
 
         // Add action listener for the Edit Job button
-        this.jobView.addEditButtonListener(new ActionListener() {
+        this.mainView.addEditButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 handleEditJobApplication();
@@ -45,7 +42,7 @@ public class JobApplicationController {
     public void loadJobApplications() {
         try {
             List<JobApplication> applications = DatabaseHelper.getAllJobApplications();
-            jobView.displayJobApplications(applications);
+            mainView.displayJobApplications(applications);
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error loading job applications.");
@@ -60,10 +57,10 @@ public class JobApplicationController {
 
     // Handle editing the selected job application
     private void handleEditJobApplication() {
-        int selectedRow = jobView.getSelectedRow();
+        int selectedRow = mainView.getSelectedRow();
         if (selectedRow >= 0) {
             // Logic to edit the selected job application
-            JobApplication job = jobView.getJobApplicationFromRow(selectedRow);
+            JobApplication job = mainView.getJobApplicationFromRow(selectedRow);
             // After editing, update the database and refresh the table
             DatabaseHelper.updateJobApplication(job);
             loadJobApplications();

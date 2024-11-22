@@ -1,7 +1,7 @@
 package controller;
 
 import javax.swing.JOptionPane;
-import view.JobApplicationView;
+import view.MainView;
 import view.LoginView;
 import view.RegistrationView;
 import view.AddJobApplicationView;
@@ -14,8 +14,8 @@ public class MainController {
     private RegistrationView registrationView;
     private RegistrationController registrationController;
     
-    private JobApplicationView jobApplicationView;
-    private JobApplicationController jobApplicationController;
+    private MainView mainView;
+    private MainViewController mainViewController;
     
     private AddJobApplicationView addJAView;
     private AddJobApplicationController addJAController;
@@ -47,16 +47,16 @@ public class MainController {
     }
 
     // Method to show job application tracking view (after login)
-    public void showJobApplicationView() {
+    public void showMainView() {
         disposeCurrentView();  // Dispose current view (loginView in this case)
 
         // Create the job application view and controller
-        jobApplicationView = new JobApplicationView();
-        jobApplicationController = new JobApplicationController(jobApplicationView, this);
-        jobApplicationView.showView();
+        mainView = new MainView();
+        mainViewController = new MainViewController(mainView, this);
+        mainView.showView();
     }
     public void showAddJobApplication(){
-        addJAView = new AddJobApplicationView(jobApplicationView.getFrame());
+        addJAView = new AddJobApplicationView(mainView.getFrame());
         
         addJAController = new AddJobApplicationController(addJAView, this);
         addJAView.showView();
@@ -77,10 +77,10 @@ public class MainController {
             registrationController = null;
         }
 
-        if (jobApplicationView != null) {
-            jobApplicationView.disposeView();
-            jobApplicationView = null;
-            jobApplicationController = null;
+        if (mainView != null) {
+            mainView.disposeView();
+            mainView = null;
+            mainViewController = null;
         }
     }
     public void disposeAddView(){
@@ -89,7 +89,7 @@ public class MainController {
             addJAView = null;
             addJAController = null;
         }
-        jobApplicationController.loadJobApplications();
+        mainViewController.loadJobApplications();
     }
 
     // Additional utility methods like logging errors or notifications

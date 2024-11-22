@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import model.JobApplication;
 
-public class JobApplicationView {
+public class MainView {
     private JFrame frame;
     private JTable jobTable;
     private DefaultTableModel tableModel;
@@ -17,7 +17,7 @@ public class JobApplicationView {
     private JButton editButton;
     private JScrollPane scrollPane;
 
-    public JobApplicationView() {
+    public MainView() {
         frame = new JFrame("Job Application Tracker");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(800, 600));
