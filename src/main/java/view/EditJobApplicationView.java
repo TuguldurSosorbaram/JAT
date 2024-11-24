@@ -15,7 +15,6 @@ public class EditJobApplicationView {
     private JTextField salaryApproxField;
     private JTextField locationField;
     private JComboBox<String> statusComboBox;
-    private JSpinner dateSavedSpinner;
     private JSpinner deadlineSpinner;
     private JSpinner dateAppliedSpinner;
     private JSpinner followUpDateSpinner;
@@ -36,7 +35,7 @@ public class EditJobApplicationView {
         format.setGroupingUsed(false);
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setValueClass(Integer.class);
-        formatter.setAllowsInvalid(false);
+        formatter.setAllowsInvalid(true);
         formatter.setMinimum(0);
         salaryApproxField = new JFormattedTextField(formatter);
 
@@ -44,7 +43,6 @@ public class EditJobApplicationView {
         statusComboBox = new JComboBox<>(new String[]{"Applied", "Interview", "Offer", "Rejected"});
 
         // Spinners for dates
-        dateSavedSpinner = new JSpinner(new SpinnerDateModel());
         deadlineSpinner = new JSpinner(new SpinnerDateModel());
         dateAppliedSpinner = new JSpinner(new SpinnerDateModel());
         followUpDateSpinner = new JSpinner(new SpinnerDateModel());
@@ -63,8 +61,6 @@ public class EditJobApplicationView {
         dialog.add(locationField);
         dialog.add(new JLabel("Status:"));
         dialog.add(statusComboBox);
-        dialog.add(new JLabel("Date Saved:"));
-        dialog.add(dateSavedSpinner);
         dialog.add(new JLabel("Deadline:"));
         dialog.add(deadlineSpinner);
         dialog.add(new JLabel("Date Applied:"));
@@ -97,7 +93,6 @@ public class EditJobApplicationView {
         salaryApproxField.setText(String.valueOf(job.getSalaryApproximation()));
         locationField.setText(job.getLocation());
         statusComboBox.setSelectedItem(job.getStatus());
-        dateSavedSpinner.setValue(job.getDateSaved());
         deadlineSpinner.setValue(job.getDeadline());
         dateAppliedSpinner.setValue(job.getDateApplied());
         followUpDateSpinner.setValue(job.getFollowUpDate());
@@ -110,8 +105,7 @@ public class EditJobApplicationView {
                 companyNameField.getText(),
                 Integer.parseInt(salaryApproxField.getText()),
                 locationField.getText(),
-                (String) statusComboBox.getSelectedItem(),
-                new java.sql.Date(((Date) dateSavedSpinner.getValue()).getTime()),    
+                (String) statusComboBox.getSelectedItem(),   
                 new java.sql.Date(((Date) deadlineSpinner.getValue()).getTime()),   
                 new java.sql.Date(((Date) dateAppliedSpinner.getValue()).getTime()),  
                 new java.sql.Date(((Date) followUpDateSpinner.getValue()).getTime()),

@@ -37,17 +37,16 @@ public class AddJobApplicationController {
     }
 
     private void handleSaveJobApplication() {
-        JobApplication newJob = new JobApplication();
-        newJob.setPosition(addJobView.getPosition());
-        newJob.setCompanyName(addJobView.getCompanyName());
-        newJob.setSalaryApproximation(addJobView.getSalaryApproximation());
-        newJob.setLocation(addJobView.getLocation());
-        newJob.setStatus(addJobView.getStatus());
-        newJob.setDateSaved(new java.sql.Date(addJobView.getDateSaved().getTime()));
-        newJob.setDeadline(new java.sql.Date(addJobView.getDeadline().getTime()));
-        newJob.setDateApplied(new java.sql.Date(addJobView.getDateApplied().getTime()));
-        newJob.setFollowUpDate(new java.sql.Date(addJobView.getFollowUpDate().getTime()));
-        newJob.setExcitement(addJobView.getExcitement());
+        JobApplication newJob = new JobApplication(
+            addJobView.getPosition(),
+            addJobView.getCompanyName(),
+            addJobView.getSalaryApproximation(),
+            addJobView.getLocation(),
+            addJobView.getStatus(),
+            (new java.sql.Date(addJobView.getDeadline().getTime())),
+            (new java.sql.Date(addJobView.getDateApplied().getTime())),
+            (new java.sql.Date(addJobView.getFollowUpDate().getTime())),
+            addJobView.getExcitement());
 
         try {
             DatabaseHelper.addJobApplication(newJob); // Save to database

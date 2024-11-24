@@ -1,5 +1,6 @@
 controller\RegistrationController$1.class
 controller\AuthenticationController$2.class
+view\MainView$2.class
 controller\MainViewController$1.class
 controller\MainViewController.class
 controller\AddJobApplicationController$1.class
@@ -16,10 +17,12 @@ model\JobApplication.class
 utils\SQLiteConnection.class
 controller\AddJobApplicationController$2.class
 controller\MainViewController$2.class
+view\MainView$1.class
 view\EditJobApplicationView.class
 view\LoginView.class
 controller\AddJobApplicationController.class
 com\sutu\jobtracker\jat\JAT.class
+controller\AuthenticationController$3.class
 view\MainView.class
 view\RegistrationView$1.class
 controller\RegistrationController$2.class

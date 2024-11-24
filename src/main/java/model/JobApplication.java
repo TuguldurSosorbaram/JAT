@@ -1,5 +1,6 @@
 package model;
 
+import static java.lang.System.currentTimeMillis;
 import java.sql.Date;
 
 public class JobApplication {
@@ -17,11 +18,11 @@ public class JobApplication {
 
     // Constructor
     public JobApplication(){
-        this.position = "";
-        this.companyName = "";
+        this.position = null;
+        this.companyName = null;
         this.salaryApproximation = 0;
-        this.location = "";
-        this.status = "";
+        this.location = null;
+        this.status = null;
         this.dateSaved = null;
         this.deadline = null;
         this.dateApplied = null;
@@ -37,6 +38,20 @@ public class JobApplication {
         this.location = location;
         this.status = status;
         this.dateSaved = dateSaved;
+        this.deadline = deadline;
+        this.dateApplied = dateApplied;
+        this.followUpDate = followUpDate;
+        setExcitement(excitement);  // Ensures excitement is within range
+    }
+    public JobApplication(String position, String companyName, int salaryApproximation, String location,
+                          String status, java.sql.Date deadline, 
+                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement) {
+        this.position = position;
+        this.companyName = companyName;
+        this.salaryApproximation = salaryApproximation;
+        this.location = location;
+        this.status = status;
+        this.dateSaved = new java.sql.Date(System.currentTimeMillis());
         this.deadline = deadline;
         this.dateApplied = dateApplied;
         this.followUpDate = followUpDate;

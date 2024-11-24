@@ -12,6 +12,7 @@ public class EditJobApplicationController {
     private JobApplication originalJob;
 
     public EditJobApplicationController(MainController mainController, EditJobApplicationView editView, JobApplication jobApplication) {
+        this.mainController = mainController;
         this.originalJob = jobApplication; // Save the original job application
         this.editView = editView;
 
@@ -30,6 +31,7 @@ public class EditJobApplicationController {
 
             // Preserve the original ID
             updatedJob.setId(originalJob.getId());
+            updatedJob.setDateSaved(originalJob.getDateSaved());
 
             // Update the database
             DatabaseHelper.updateJobApplication(updatedJob);

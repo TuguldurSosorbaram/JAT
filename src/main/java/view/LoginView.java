@@ -3,6 +3,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -146,5 +147,9 @@ public class LoginView {
 
     public void addRegisterListener(MouseAdapter listener) {
         registerLabel.addMouseListener(listener);
+    }
+    public void addKeyListenerForEnter(KeyAdapter listener) {
+        usernameField.addKeyListener(listener);
+        passwordField.addKeyListener(listener);
     }
 }

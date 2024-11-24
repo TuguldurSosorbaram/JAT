@@ -14,7 +14,6 @@ public class AddJobApplicationView {
     private JTextField salaryApproxField;
     private JTextField locationField;
     private JComboBox<String> statusComboBox;
-    private JSpinner dateSavedSpinner;
     private JSpinner deadlineSpinner;
     private JSpinner dateAppliedSpinner;
     private JSpinner followUpDateSpinner;
@@ -35,7 +34,7 @@ public class AddJobApplicationView {
         format.setGroupingUsed(false); // Disable thousand separators
         NumberFormatter formatter = new NumberFormatter(format);
         formatter.setValueClass(Integer.class);
-        formatter.setAllowsInvalid(false); // Prevent invalid input
+        formatter.setAllowsInvalid(true); // Prevent invalid input
         formatter.setMinimum(0); // Optional: restrict to non-negative numbers
         salaryApproxField = new JFormattedTextField(formatter);
         
@@ -43,7 +42,6 @@ public class AddJobApplicationView {
         statusComboBox = new JComboBox<>(new String[]{"Applied", "Interview", "Offer", "Rejected"}); // Example statuses
 
         // Spinners for dates
-        dateSavedSpinner = new JSpinner(new SpinnerDateModel());
         deadlineSpinner = new JSpinner(new SpinnerDateModel());
         dateAppliedSpinner = new JSpinner(new SpinnerDateModel());
         followUpDateSpinner = new JSpinner(new SpinnerDateModel());
@@ -62,8 +60,6 @@ public class AddJobApplicationView {
         dialog.add(locationField);
         dialog.add(new JLabel("Status:"));
         dialog.add(statusComboBox);
-        dialog.add(new JLabel("Date Saved:"));
-        dialog.add(dateSavedSpinner);
         dialog.add(new JLabel("Deadline:"));
         dialog.add(deadlineSpinner);
         dialog.add(new JLabel("Date Applied:"));
@@ -112,10 +108,6 @@ public class AddJobApplicationView {
 
     public String getStatus() {
         return (String) statusComboBox.getSelectedItem();
-    }
-
-    public Date getDateSaved() {
-        return new java.sql.Date(((Date) dateSavedSpinner.getValue()).getTime());
     }
 
     public Date getDeadline() {

@@ -7,7 +7,7 @@ import java.util.List;
 
 public class JATableModel extends AbstractTableModel {
     private final String[] columnNames = {
-            "Position", "Company Name", "Salary Approximation", "Location",
+            "Position", "Company", "Salary", "Location",
             "Status", "Date Saved", "Deadline", "Date Applied", "Follow-Up", "Excitement"
     };
 
