@@ -18,6 +18,7 @@ public class JobApplication {
 
     // Constructor
     public JobApplication(){
+        this.id = -1;
         this.position = null;
         this.companyName = null;
         this.salaryApproximation = 0;
@@ -32,6 +33,7 @@ public class JobApplication {
     public JobApplication(String position, String companyName, int salaryApproximation, String location,
                           String status, java.sql.Date dateSaved, java.sql.Date deadline, 
                           java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement) {
+        this.id = -1;
         this.position = position;
         this.companyName = companyName;
         this.salaryApproximation = salaryApproximation;
@@ -46,6 +48,7 @@ public class JobApplication {
     public JobApplication(String position, String companyName, int salaryApproximation, String location,
                           String status, java.sql.Date deadline, 
                           java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement) {
+        this.id = -1;
         this.position = position;
         this.companyName = companyName;
         this.salaryApproximation = salaryApproximation;

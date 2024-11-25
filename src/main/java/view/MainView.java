@@ -10,15 +10,32 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Comparator;
 import java.util.List;
+import javax.swing.table.TableRowSorter;
 
 public class MainView {
     private JFrame frame;
     private JTable jobTable;
     private JATableModel tableModel;
+    private TableRowSorter<JATableModel> sorter;
     private JButton addButton;
     private JButton editButton;
     private JScrollPane scrollPane;
+    
+    public static final Comparator<Object> NUMERIC_COMPARATOR = (o1, o2) -> {
+        if (o1 instanceof Integer && o2 instanceof Integer) {
+            return ((Integer) o1).compareTo((Integer) o2);
+        }
+        return 0; // Default equality if types don't match
+    };
+
+    public static final Comparator<Object> DATE_COMPARATOR = (o1, o2) -> {
+        if (o1 instanceof java.sql.Date && o2 instanceof java.sql.Date) {
+            return ((java.sql.Date) o1).compareTo((java.sql.Date) o2);
+        }
+        return 0; // Default equality if types don't match
+    };
 
     public MainView() {
         // Frame setup
@@ -79,7 +96,6 @@ public class MainView {
     }
 
     private void customizeTableAppearance(JTable table) {
-        table.getTableHeader().setResizingAllowed(false);
         table.setRowHeight(50); 
 
         // Alternating row colors
@@ -108,10 +124,11 @@ public class MainView {
 
         // Header customization
         JTableHeader header = table.getTableHeader();
+        header.setResizingAllowed(false);
         header.setFont(new Font("Inter", Font.BOLD, 14));
         header.setBackground(new Color(44, 62, 80)); // Dark blue
         header.setForeground(Color.WHITE);
-        
+        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 50));
         setProportionalColumnWidths(table);
         scrollPane.addComponentListener(new ComponentAdapter() {
             @Override
@@ -119,14 +136,21 @@ public class MainView {
                 setProportionalColumnWidths(table);
             }
         });
-        header.setPreferredSize(new Dimension(header.getPreferredSize().width, 60));
-        
-        
     }
-
     public void setJobApplications(List<JobApplication> applications) {
         tableModel = new JATableModel(applications);
         jobTable.setModel(tableModel);
+        
+        // Initialize and attach the TableRowSorter
+        sorter = new TableRowSorter<>(tableModel);
+        jobTable.setRowSorter(sorter);
+        
+        sorter.setComparator(2, NUMERIC_COMPARATOR); // Salary column
+        sorter.setComparator(5, DATE_COMPARATOR);    // Date Saved column
+        sorter.setComparator(6, DATE_COMPARATOR);    // Deadline column
+        sorter.setComparator(7, DATE_COMPARATOR);   // date applied
+        sorter.setComparator(8, DATE_COMPARATOR);   // follow-up date
+        
         jobTable.clearSelection(); // Deselect any selected row
         scrollPane.getVerticalScrollBar().setValue(0); // Scroll to the top
     }
@@ -161,7 +185,8 @@ public class MainView {
     public JobApplication getSelectedJobApplication() {
         int selectedRow = getSelectedRow();
         if (selectedRow >= 0) {
-            return tableModel.getJobAt(selectedRow);
+            int modelRow = jobTable.convertRowIndexToModel(selectedRow);
+            return tableModel.getJobAt(modelRow);
         }
         return null;
     }
