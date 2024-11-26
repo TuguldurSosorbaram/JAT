@@ -9,11 +9,13 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableRowSorter;
 
 public class MainView {
@@ -24,6 +26,8 @@ public class MainView {
     private JButton addButton;
     private JButton editButton;
     private JScrollPane scrollPane;
+    
+    ActionListener excitementUpdateListener;
     private boolean isRendererEditorSet = false;
     
     public static final Comparator<Object> NUMERIC_COMPARATOR = (o1, o2) -> {
@@ -161,6 +165,19 @@ public class MainView {
             jobTable.getColumnModel().getColumn(9).setCellEditor(new StarEditor());
             isRendererEditorSet = true;
         }
+        tableModel.addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.UPDATE) {
+                int row = e.getFirstRow();
+                int column = e.getColumn();
+                
+                // Check if the updated column is "excitement"
+                if (column == 9) {
+                    JobApplication updatedJob = tableModel.getJobAt(row);
+                    System.out.println("Updating excitement to: " + updatedJob.getExcitement() + " - " +updatedJob.getPosition());
+                    triggerTableEditListener(updatedJob);
+                }
+            }
+        });
         
         jobTable.clearSelection(); // Deselect any selected row
         scrollPane.getVerticalScrollBar().setValue(0); // Scroll to the top
@@ -203,11 +220,19 @@ public class MainView {
     }
 
     public void addAddButtonListener(ActionListener listener) {
-        addButton.addActionListener(listener);
+        this.addButton.addActionListener(listener);
     }
 
     public void addEditButtonListener(ActionListener listener) {
-        editButton.addActionListener(listener);
+        this.editButton.addActionListener(listener);
+    }
+    public void addTableEditListener(ActionListener listener) {
+        this.excitementUpdateListener = listener;
+    }
+    public void triggerTableEditListener(JobApplication job){
+        if(excitementUpdateListener != null) {
+            excitementUpdateListener.actionPerformed(new ActionEvent(job, ActionEvent.ACTION_PERFORMED, "UpdateExcitement"));
+        }
     }
 
     public void showView() {

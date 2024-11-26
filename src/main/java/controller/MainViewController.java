@@ -37,6 +37,18 @@ public class MainViewController {
                 handleEditJobApplication();
             }
         });
+        mainView.addTableEditListener(e -> {
+            if (e.getSource() instanceof JobApplication) {
+                JobApplication updatedJob = (JobApplication) e.getSource();
+                try {
+                    DatabaseHelper.updateJobApplication(updatedJob);
+                    System.out.println("Database updated successfully for job ID: " + updatedJob.getId());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(mainView.getFrame(), "Failed to update excitement in the database.");
+                }
+            }
+        });
     }
 
     // Load job applications from the database and display them in the view

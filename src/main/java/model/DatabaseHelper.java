@@ -155,7 +155,7 @@ public class DatabaseHelper {
             pstmt.setDate(8, job.getDateApplied());
             pstmt.setDate(9, job.getFollowUpDate());
             pstmt.setInt(10, job.getExcitement());
-            pstmt.setInt(11, job.getId()); // Assuming the ID is used for identifying the record
+            pstmt.setInt(11, job.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
