@@ -2,6 +2,8 @@ package view;
 
 import view.model.JATableModel;
 import model.JobApplication;
+import view.model.StarRenderer;
+import view.model.StarEditor;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -22,6 +24,7 @@ public class MainView {
     private JButton addButton;
     private JButton editButton;
     private JScrollPane scrollPane;
+    private boolean isRendererEditorSet = false;
     
     public static final Comparator<Object> NUMERIC_COMPARATOR = (o1, o2) -> {
         if (o1 instanceof Integer && o2 instanceof Integer) {
@@ -136,6 +139,8 @@ public class MainView {
                 setProportionalColumnWidths(table);
             }
         });
+        
+        
     }
     public void setJobApplications(List<JobApplication> applications) {
         tableModel = new JATableModel(applications);
@@ -150,6 +155,12 @@ public class MainView {
         sorter.setComparator(6, DATE_COMPARATOR);    // Deadline column
         sorter.setComparator(7, DATE_COMPARATOR);   // date applied
         sorter.setComparator(8, DATE_COMPARATOR);   // follow-up date
+        
+        if (!isRendererEditorSet) {
+            jobTable.getColumnModel().getColumn(9).setCellRenderer(new StarRenderer());
+            jobTable.getColumnModel().getColumn(9).setCellEditor(new StarEditor());
+            isRendererEditorSet = true;
+        }
         
         jobTable.clearSelection(); // Deselect any selected row
         scrollPane.getVerticalScrollBar().setValue(0); // Scroll to the top

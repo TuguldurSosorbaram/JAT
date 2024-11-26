@@ -1,4 +1,5 @@
 controller\RegistrationController$1.class
+view\model\StarRenderer.class
 controller\AuthenticationController$2.class
 view\MainView$2.class
 controller\MainViewController$1.class
@@ -7,7 +8,9 @@ controller\AddJobApplicationController$1.class
 controller\MainController.class
 controller\AuthenticationController.class
 controller\EditJobApplicationController.class
+view\model\StarEditor$1.class
 view\LoginView$1.class
+view\model\StarEditor.class
 view\RegistrationView.class
 view\AddJobApplicationView.class
 model\User.class
