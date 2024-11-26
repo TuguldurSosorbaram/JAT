@@ -15,6 +15,7 @@ view\RegistrationView.class
 view\AddJobApplicationView.class
 model\User.class
 controller\RegistrationController.class
+view\MainView$3.class
 controller\AuthenticationController$1.class
 model\JobApplication.class
 utils\SQLiteConnection.class

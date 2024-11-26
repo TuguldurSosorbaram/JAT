@@ -13,7 +13,7 @@ public class StarEditor extends AbstractCellEditor implements TableCellEditor {
     public StarEditor() {
         panel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 int x = e.getX();
                 int starSize = 24; // Same size as renderer
                 currentRating = Math.min(5, Math.max(1, x / starSize + 1));

@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Comparator;
 import java.util.List;
 import javax.swing.event.TableModelEvent;
@@ -143,6 +145,37 @@ public class MainView {
                 setProportionalColumnWidths(table);
             }
         });
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                int column = table.columnAtPoint(e.getPoint());
+                
+                if (row != -1) {
+                    if (column == 9) {
+                        table.editCellAt(row, column); // Force cell editing
+                        Component editor = table.getEditorComponent();
+                        if (editor != null) {
+                            MouseEvent editorClickEvent = SwingUtilities.convertMouseEvent(table, e, editor);
+                            editor.dispatchEvent(editorClickEvent);
+                            editor.requestFocus(); 
+                        }
+                        //table.clearSelection();
+                    } else if (column == 4) { // Status column
+                        table.editCellAt(row, column);
+                        Component editor = table.getEditorComponent();
+                        if (editor != null) {
+                            editor.requestFocus();
+                        }
+                        //table.clearSelection();
+                    } else {
+                        // Select the row for non-editable columns
+                        table.setRowSelectionInterval(row, row);
+                    }
+                }
+            }
+        });
         
         
     }
@@ -159,12 +192,10 @@ public class MainView {
         sorter.setComparator(6, DATE_COMPARATOR);    // Deadline column
         sorter.setComparator(7, DATE_COMPARATOR);   // date applied
         sorter.setComparator(8, DATE_COMPARATOR);   // follow-up date
-        
-        if (!isRendererEditorSet) {
-            jobTable.getColumnModel().getColumn(9).setCellRenderer(new StarRenderer());
-            jobTable.getColumnModel().getColumn(9).setCellEditor(new StarEditor());
-            isRendererEditorSet = true;
-        }
+
+        jobTable.getColumnModel().getColumn(9).setCellRenderer(new StarRenderer());
+        jobTable.getColumnModel().getColumn(9).setCellEditor(new StarEditor());
+
         tableModel.addTableModelListener(e -> {
             if (e.getType() == TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
