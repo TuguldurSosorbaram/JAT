@@ -42,7 +42,6 @@ public class MainViewController {
                 JobApplication updatedJob = (JobApplication) e.getSource();
                 try {
                     DatabaseHelper.updateJobApplication(updatedJob);
-                    System.out.println("Database updated successfully for job ID: " + updatedJob.getId());
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(mainView.getFrame(), "Failed to update excitement in the database.");

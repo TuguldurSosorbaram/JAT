@@ -195,6 +195,8 @@ public class MainView {
 
         jobTable.getColumnModel().getColumn(9).setCellRenderer(new StarRenderer());
         jobTable.getColumnModel().getColumn(9).setCellEditor(new StarEditor());
+        
+        
 
         tableModel.addTableModelListener(e -> {
             if (e.getType() == TableModelEvent.UPDATE) {
@@ -204,7 +206,6 @@ public class MainView {
                 // Check if the updated column is "excitement"
                 if (column == 9) {
                     JobApplication updatedJob = tableModel.getJobAt(row);
-                    System.out.println("Updating excitement to: " + updatedJob.getExcitement() + " - " +updatedJob.getPosition());
                     triggerTableEditListener(updatedJob);
                 }
             }

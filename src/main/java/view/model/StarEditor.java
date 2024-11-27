@@ -9,14 +9,20 @@ import javax.swing.table.TableCellEditor;
 public class StarEditor extends AbstractCellEditor implements TableCellEditor {
     private final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
     private int currentRating = 0;
-    
+    private int columnWidth = 0;
+    private int rowHeight = 0;
+
     public StarEditor() {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                // Calculate the star size dynamically
+                int starSize = Math.min(columnWidth / 5, rowHeight);
+
+                // Determine the new rating based on the click position
                 int x = e.getX();
-                int starSize = 24; // Same size as renderer
                 currentRating = Math.min(5, Math.max(1, x / starSize + 1));
+                
                 stopCellEditing();
             }
         });
@@ -27,6 +33,11 @@ public class StarEditor extends AbstractCellEditor implements TableCellEditor {
         if (value instanceof Integer) {
             currentRating = (Integer) value;
         }
+
+        // Dynamically fetch the column width and row height
+        columnWidth = table.getColumnModel().getColumn(column).getWidth();
+        rowHeight = table.getRowHeight(row);
+
         return panel;
     }
 
