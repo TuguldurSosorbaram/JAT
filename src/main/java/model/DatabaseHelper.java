@@ -15,7 +15,10 @@ public class DatabaseHelper {
                 Statement stmt = conn.createStatement();
 
                 // Create table for users
-                stmt.execute("CREATE TABLE IF NOT EXISTS users (username TEXT PRIMARY KEY, password TEXT)");
+                stmt.execute("CREATE TABLE IF NOT EXISTS users (" +
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "username TEXT NOT NULL UNIQUE, " +
+                        "password TEXT NOT NULL)");
 
                 // Create table for job applications with the specified columns
                 stmt.execute("CREATE TABLE IF NOT EXISTS job_applications (" +
@@ -29,7 +32,9 @@ public class DatabaseHelper {
                         "deadline DATE, " +
                         "date_applied DATE, " +
                         "follow_up DATE, " +
-                        "excitement INTEGER)");
+                        "excitement INTEGER,"+
+                        "user_id INTEGER NOT NULL, " + 
+                        "FOREIGN KEY (user_id) REFERENCES users (id))");
 
             }
         } catch (SQLException e) {
@@ -92,7 +97,7 @@ public class DatabaseHelper {
     // Add a new job application to the database
     public static void addJobApplication(JobApplication job) throws SQLException {
         String sql = "INSERT INTO job_applications(position, company_name, salary_approximation, location, status, " +
-                "date_saved, deadline, date_applied, follow_up, excitement) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "date_saved, deadline, date_applied, follow_up, excitement, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = SQLiteConnection.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -106,41 +111,13 @@ public class DatabaseHelper {
             pstmt.setDate(8, job.getDateApplied());
             pstmt.setDate(9, job.getFollowUpDate());
             pstmt.setInt(10, job.getExcitement());
-
+            pstmt.setInt(11, job.getUserId());
             pstmt.executeUpdate();
         }
     }
-    public static List<JobApplication> getAllJobApplications() {
-        List<JobApplication> applications = new ArrayList<>();
-        String sql = "SELECT * FROM job_applications";
-
-        try (Connection conn = SQLiteConnection.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                JobApplication job = new JobApplication();
-                job.setId(rs.getInt("id"));
-                job.setPosition(rs.getString("position"));
-                job.setCompanyName(rs.getString("company_name"));
-                job.setSalaryApproximation(rs.getInt("salary_approximation"));
-                job.setLocation(rs.getString("location"));
-                job.setStatus(rs.getString("status"));
-                job.setDateSaved(rs.getDate("date_saved"));
-                job.setDeadline(rs.getDate("deadline"));
-                job.setDateApplied(rs.getDate("date_applied"));
-                job.setFollowUpDate(rs.getDate("follow_up"));
-                job.setExcitement(rs.getInt("excitement"));
-                applications.add(job);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return applications;
-    }
     public static void updateJobApplication(JobApplication job) {
         String sql = "UPDATE job_applications SET position = ?, company_name = ?, salary_approximation = ?, location = ?, status = ?, " +
-                     "date_saved = ?, deadline = ?, date_applied = ?, follow_up = ?, excitement = ? WHERE id = ?";
+                     "date_saved = ?, deadline = ?, date_applied = ?, follow_up = ?, excitement = ? WHERE id = ? and user_id = ?";
 
         try (Connection conn = SQLiteConnection.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -156,11 +133,56 @@ public class DatabaseHelper {
             pstmt.setDate(9, job.getFollowUpDate());
             pstmt.setInt(10, job.getExcitement());
             pstmt.setInt(11, job.getId());
+            pstmt.setInt(12, job.getUserId());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public static List<JobApplication> getJobApplicationsByUser(int userId) {
+        List<JobApplication> applications = new ArrayList<>();
+        String sql = "SELECT * FROM job_applications WHERE user_id = ?";
+
+        try (Connection conn = SQLiteConnection.connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                JobApplication job = new JobApplication();
+                job.setId(rs.getInt("id"));
+                job.setPosition(rs.getString("position"));
+                job.setCompanyName(rs.getString("company_name"));
+                job.setSalaryApproximation(rs.getInt("salary_approximation"));
+                job.setLocation(rs.getString("location"));
+                job.setStatus(rs.getString("status"));
+                job.setDateSaved(rs.getDate("date_saved"));
+                job.setDeadline(rs.getDate("deadline"));
+                job.setDateApplied(rs.getDate("date_applied"));
+                job.setFollowUpDate(rs.getDate("follow_up"));
+                job.setExcitement(rs.getInt("excitement"));
+                job.setUserId(rs.getInt("user_id")); // Populate userId
+                applications.add(job);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return applications;
+    }
+    public static int getUserIdByUsername(String username) {
+        String sql = "SELECT id FROM users WHERE username = ?";
+        try (Connection conn = SQLiteConnection.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id"); // Return the user ID
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
 }

@@ -2,7 +2,7 @@ package model;
 
 public class User {
     private String username;
-    private String password;  // For simplicity, not encrypted yet
+    private String password;
 
     public User(String username, String password) {
         this.username = username;

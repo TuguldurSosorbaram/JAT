@@ -1,6 +1,5 @@
 package model;
 
-import static java.lang.System.currentTimeMillis;
 import java.sql.Date;
 
 public class JobApplication {
@@ -14,7 +13,8 @@ public class JobApplication {
     private java.sql.Date deadline;
     private java.sql.Date dateApplied;
     private java.sql.Date followUpDate;
-    private int excitement;  // Should be a value between 1 and 5
+    private int excitement;
+    private int userId;
 
     // Constructor
     public JobApplication(){
@@ -32,7 +32,7 @@ public class JobApplication {
     }
     public JobApplication(String position, String companyName, int salaryApproximation, String location,
                           String status, java.sql.Date dateSaved, java.sql.Date deadline, 
-                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement) {
+                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement, int userId) {
         this.id = -1;
         this.position = position;
         this.companyName = companyName;
@@ -44,10 +44,11 @@ public class JobApplication {
         this.dateApplied = dateApplied;
         this.followUpDate = followUpDate;
         setExcitement(excitement);  // Ensures excitement is within range
+        this.userId = userId;
     }
     public JobApplication(String position, String companyName, int salaryApproximation, String location,
                           String status, java.sql.Date deadline, 
-                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement) {
+                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement, int userId) {
         this.id = -1;
         this.position = position;
         this.companyName = companyName;
@@ -59,6 +60,7 @@ public class JobApplication {
         this.dateApplied = dateApplied;
         this.followUpDate = followUpDate;
         setExcitement(excitement);  // Ensures excitement is within range
+        this.userId = userId;
     }
 
     // Getters and Setters
@@ -143,6 +145,13 @@ public class JobApplication {
 
     public int getExcitement() {
         return excitement;
+    }
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public void setExcitement(int excitement) {

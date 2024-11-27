@@ -10,6 +10,8 @@ import view.EditJobApplicationView;
 
 
 public class MainController {
+    int loggedUserID;
+    
     private LoginView loginView;
     private AuthenticationController authController;
     
@@ -28,6 +30,9 @@ public class MainController {
     // Constructor initializes the main flow by showing the login view
     public MainController() {
         showLoginView();
+    }
+    public int getLoggedUserId(){
+        return this.loggedUserID;
     }
 
     // Method to show login view
@@ -52,7 +57,8 @@ public class MainController {
     }
 
     // Method to show job application tracking view (after login)
-    public void showMainView() {
+    public void showMainView(int user_id) {
+        this.loggedUserID = user_id;
         disposeCurrentView();  // Dispose current view (loginView in this case)
 
         // Create the job application view and controller

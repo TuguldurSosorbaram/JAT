@@ -46,7 +46,8 @@ public class AddJobApplicationController {
             (new java.sql.Date(addJobView.getDeadline().getTime())),
             (new java.sql.Date(addJobView.getDateApplied().getTime())),
             (new java.sql.Date(addJobView.getFollowUpDate().getTime())),
-            addJobView.getExcitement());
+            addJobView.getExcitement(),
+            this.mainController.getLoggedUserId());
 
         try {
             DatabaseHelper.addJobApplication(newJob); // Save to database

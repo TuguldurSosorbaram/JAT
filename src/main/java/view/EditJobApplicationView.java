@@ -109,7 +109,8 @@ public class EditJobApplicationView {
                 new java.sql.Date(((Date) deadlineSpinner.getValue()).getTime()),   
                 new java.sql.Date(((Date) dateAppliedSpinner.getValue()).getTime()),  
                 new java.sql.Date(((Date) followUpDateSpinner.getValue()).getTime()),
-                (int) excitementSpinner.getValue()
+                (int) excitementSpinner.getValue(),
+                -1
         );
     }
 

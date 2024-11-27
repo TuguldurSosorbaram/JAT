@@ -46,9 +46,10 @@ public class AuthenticationController {
         String password = loginView.getPassword();
 
         try {
-            if (DatabaseHelper.validateUser(username, password)) {
-                System.out.println("Login successful!");
-                mainController.showMainView();  // Transition to job application view
+            if (DatabaseHelper.validateUser(username, password) 
+                    && DatabaseHelper.getUserIdByUsername(username) != -1) {
+                
+                mainController.showMainView(DatabaseHelper.getUserIdByUsername(username)); 
             } else {
                 mainController.showError("Login failed! Please check your credentials.");
             }

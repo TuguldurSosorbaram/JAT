@@ -32,6 +32,7 @@ public class EditJobApplicationController {
             // Preserve the original ID
             updatedJob.setId(originalJob.getId());
             updatedJob.setDateSaved(originalJob.getDateSaved());
+            updatedJob.setUserId(originalJob.getUserId());
 
             // Update the database
             DatabaseHelper.updateJobApplication(updatedJob);

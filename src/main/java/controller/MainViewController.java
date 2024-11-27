@@ -5,10 +5,8 @@ import model.DatabaseHelper;
 import view.MainView;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.JOptionPane;
-import view.EditJobApplicationView;
 
 public class MainViewController {
     private MainView mainView;
@@ -22,20 +20,13 @@ public class MainViewController {
         loadJobApplications();
 
         // Add action listener for the Add Job button
-        this.mainView.addAddButtonListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle adding a new job application
-                handleAddJobApplication();
-            }
+        this.mainView.addAddButtonListener((ActionEvent e) -> {
+            handleAddJobApplication();
         });
 
         // Add action listener for the Edit Job button
-        this.mainView.addEditButtonListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                handleEditJobApplication();
-            }
+        this.mainView.addEditButtonListener((ActionEvent e) -> {
+            handleEditJobApplication();
         });
         mainView.addTableEditListener(e -> {
             if (e.getSource() instanceof JobApplication) {
@@ -53,7 +44,8 @@ public class MainViewController {
     // Load job applications from the database and display them in the view
     public void loadJobApplications() {
         try {
-            List<JobApplication> applications = DatabaseHelper.getAllJobApplications();
+            List<JobApplication> applications = 
+                    DatabaseHelper.getJobApplicationsByUser(this.mainController.getLoggedUserId());
             mainView.setJobApplications(applications);
         } catch (Exception e) {
             e.printStackTrace();
