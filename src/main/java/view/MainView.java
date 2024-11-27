@@ -93,14 +93,20 @@ public class MainView {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setBackground(new Color(236, 240, 241)); // Light grey background
 
-        addButton = new JButton("Add Job");
-        addButton.setFont(new Font("Inter", Font.PLAIN, 16));
-        addButton.setIcon(new ImageIcon("icons/add-icon.png")); // Replace with actual icon path
-
-        editButton = new JButton("Edit Job");
-        editButton.setFont(new Font("Inter", Font.PLAIN, 16));
-        editButton.setIcon(new ImageIcon("icons/edit-icon.png")); // Replace with actual icon path
-
+        addButton = new MyButton("Add a New Job");
+        ImageIcon addIcon = new ImageIcon(getClass().getResource("/icons/add_icon.png"));
+        addButton.setIcon(new ImageIcon(addIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        addButton.setPreferredSize(new Dimension(200, 30)); // Set a longer size (adjust dimensions as needed)
+        addButton.setBackground(new Color(6,64,43)); // Dark green background
+        addButton.setForeground(Color.WHITE); // White text color for contrast
+        
+        editButton = new MyButton("Edit Selected Job");
+        editButton.setBackground(Color.WHITE);
+        editButton.setForeground(new Color(6,64,43));
+        ImageIcon editIcon = new ImageIcon(getClass().getResource("/icons/edit_icon.png"));
+        editButton.setIcon(new ImageIcon(editIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        editButton.setPreferredSize(new Dimension(200, 30));
+        
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
 
@@ -132,24 +138,25 @@ public class MainView {
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            label.setFont(new Font("Inter", Font.PLAIN, 14)); // Bigger font
-            label.setOpaque(true);
+                label.setFont(new Font("Inter", Font.PLAIN, 16)); // Bigger font
+                label.setOpaque(true);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
 
-            if (column == 0 || column == 1) { // Position or Company Name
-                label.setText("<html><body style='width: 100%'>" + (value == null ? "-" : value.toString()) + "</body></html>");
-            } else {
-                label.setText(value == null ? "-" : value.toString());
+                if (column == 0 || column == 1) { // Position or Company Name
+                    label.setText("<html><body style='width: 100%'>" + (value == null ? "-" : value.toString()) + "</body></html>");
+                } else {
+                    label.setText(value == null ? "-" : value.toString());
+                }
+
+                // Alternate row colors
+                if (!isSelected) {
+                    label.setBackground(row % 2 == 0 ? new Color(245, 245, 245) : Color.WHITE);
+                }
+
+                return label;
             }
-            
-            // Alternate row colors
-            if (!isSelected) {
-                label.setBackground(row % 2 == 0 ? new Color(245, 245, 245) : Color.WHITE);
-            }
-
-            return label;
-        }
         });
 
         // Header customization
@@ -166,6 +173,7 @@ public class MainView {
                 setProportionalColumnWidths(table);
             }
         });
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -231,12 +239,6 @@ public class MainView {
                 if (column == 9 || column == 4) {
                     JobApplication updatedJob = tableModel.getJobAt(row);
                     triggerTableEditListener(updatedJob);
-                    if(column == 9){
-                        System.out.println(updatedJob.getPosition() + " " + updatedJob.getId() + " " + updatedJob.getExcitement());
-                    }
-                    else{
-                        System.out.println(updatedJob.getPosition() + " " + updatedJob.getId() + " " + updatedJob.getStatus());
-                    }
                 }
             }
         });
@@ -265,6 +267,33 @@ public class MainView {
         // Set each column's preferred width proportionally
         for (int i = 0; i < columnCount; i++) {
             table.getColumnModel().getColumn(i).setPreferredWidth(Math.round(columnWidthPercentage[i] * totalWidth));
+        }
+    }
+    public class MyButton extends JButton {
+        public MyButton(String text ) {
+            super(text);
+            setOpaque(false);
+            setFont(new Font("Inter", Font.PLAIN, 16));
+            setFocusPainted(false);
+            setBorder(BorderFactory.createEmptyBorder());
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Fill rounded rectangle
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+
+            g2.setColor(new Color(6,64,63)); // Set border color
+            g2.setStroke(new BasicStroke(2)); // Set border thickness
+            g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 30, 30);
+            
+            // Draw button text
+            super.paintComponent(g2);
+            g2.dispose();
         }
     }
 
