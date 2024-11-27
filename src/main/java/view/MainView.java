@@ -36,14 +36,35 @@ public class MainView {
         if (o1 instanceof Integer && o2 instanceof Integer) {
             return ((Integer) o1).compareTo((Integer) o2);
         }
-        return 0; // Default equality if types don't match
+        return 0;
     };
 
     public static final Comparator<Object> DATE_COMPARATOR = (o1, o2) -> {
         if (o1 instanceof java.sql.Date && o2 instanceof java.sql.Date) {
             return ((java.sql.Date) o1).compareTo((java.sql.Date) o2);
         }
-        return 0; // Default equality if types don't match
+        return 0;
+    };
+    public static final Comparator<Object> STATUS_COMPARATOR = (o1, o2) -> {
+        String[] statusOptions = {"Saved", "Applying", "Applied", "Interviewing", 
+                                   "Negotiating", "Accepted", "I withdrew", 
+                                   "No response", "Rejected"};
+
+        // Get the index of each status in the array
+        int index1 = java.util.Arrays.asList(statusOptions).indexOf(o1);
+        int index2 = java.util.Arrays.asList(statusOptions).indexOf(o2);
+
+        // Handle cases where the status is not found (e.g., null or invalid values)
+        if (index1 == -1 && index2 == -1) {
+            return 0; // Both are not found, consider equal
+        } else if (index1 == -1) {
+            return 1; // Unrecognized status should come after recognized ones
+        } else if (index2 == -1) {
+            return -1; // Unrecognized status should come after recognized ones
+        }
+
+        // Compare based on the order in the statusOptions array
+        return Integer.compare(index1, index2);
     };
 
     public MainView() {
@@ -134,11 +155,11 @@ public class MainView {
         // Header customization
         JTableHeader header = table.getTableHeader();
         header.setResizingAllowed(false);
-        header.setFont(new Font("Inter", Font.BOLD, 14));
-        header.setBackground(new Color(44, 62, 80)); // Dark blue
-        header.setForeground(Color.WHITE);
+        header.setFont(new Font("Inter", Font.BOLD, 16));
+        header.setBackground(new Color(200, 200, 200)); // Dark blue
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 50));
         setProportionalColumnWidths(table);
+        scrollPane.setBackground(Color.WHITE);
         scrollPane.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -161,14 +182,14 @@ public class MainView {
                             editor.dispatchEvent(editorClickEvent);
                             editor.requestFocus(); 
                         }
-                        //table.clearSelection();
+                        table.clearSelection();
                     } else if (column == 4) { // Status column
                         table.editCellAt(row, column);
                         Component editor = table.getEditorComponent();
                         if (editor != null) {
                             editor.requestFocus();
                         }
-                        //table.clearSelection();
+                        table.clearSelection();
                     } else {
                         // Select the row for non-editable columns
                         table.setRowSelectionInterval(row, row);
@@ -188,25 +209,34 @@ public class MainView {
         jobTable.setRowSorter(sorter);
         
         sorter.setComparator(2, NUMERIC_COMPARATOR); // Salary column
+        sorter.setComparator(4, STATUS_COMPARATOR); // status column
         sorter.setComparator(5, DATE_COMPARATOR);    // Date Saved column
         sorter.setComparator(6, DATE_COMPARATOR);    // Deadline column
         sorter.setComparator(7, DATE_COMPARATOR);   // date applied
         sorter.setComparator(8, DATE_COMPARATOR);   // follow-up date
-
+        
         jobTable.getColumnModel().getColumn(9).setCellRenderer(new StarRenderer());
         jobTable.getColumnModel().getColumn(9).setCellEditor(new StarEditor());
         
-        
+        String[] statusOptions = {"Saved", "Applying", "Applied", "Interviewing", "Negotiating", "Accepted", "I withdrew", "No response", "Rejected"};
+        JComboBox<String> statusDropdown = new JComboBox<>(statusOptions);
+        jobTable.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(statusDropdown));
+
 
         tableModel.addTableModelListener(e -> {
             if (e.getType() == TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
                 
-                // Check if the updated column is "excitement"
-                if (column == 9) {
+                if (column == 9 || column == 4) {
                     JobApplication updatedJob = tableModel.getJobAt(row);
                     triggerTableEditListener(updatedJob);
+                    if(column == 9){
+                        System.out.println(updatedJob.getPosition() + " " + updatedJob.getId() + " " + updatedJob.getExcitement());
+                    }
+                    else{
+                        System.out.println(updatedJob.getPosition() + " " + updatedJob.getId() + " " + updatedJob.getStatus());
+                    }
                 }
             }
         });

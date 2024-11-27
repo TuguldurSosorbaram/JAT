@@ -39,7 +39,7 @@ public class AddJobApplicationView {
         salaryApproxField = new JFormattedTextField(formatter);
         
         locationField = new JTextField();
-        statusComboBox = new JComboBox<>(new String[]{"Applied", "Interview", "Offer", "Rejected"}); // Example statuses
+        statusComboBox = new JComboBox<>(new String[]{"Saved", "Applying", "Applied", "Interviewing", "Negotiating", "Accepted", "I withdrew", "No response", "Rejected"});
 
         // Spinners for dates
         deadlineSpinner = new JSpinner(new SpinnerDateModel());
