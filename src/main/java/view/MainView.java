@@ -27,6 +27,7 @@ public class MainView {
     private TableRowSorter<JATableModel> sorter;
     private JButton addButton;
     private JButton editButton;
+    private JButton logOutButton;
     private JScrollPane scrollPane;
     
     ActionListener excitementUpdateListener;
@@ -107,8 +108,14 @@ public class MainView {
         editButton.setIcon(new ImageIcon(editIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         editButton.setPreferredSize(new Dimension(200, 30));
         
+        logOutButton = new MyButton("Log Out");
+        logOutButton.setBackground(Color.WHITE);
+        logOutButton.setForeground(new Color(6,64,43));
+        logOutButton.setPreferredSize(new Dimension(100, 30));
+        
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
+        buttonPanel.add(logOutButton);
 
         // Add buttonPanel below the header
         northPanel.add(buttonPanel);
@@ -316,6 +323,9 @@ public class MainView {
 
     public void addEditButtonListener(ActionListener listener) {
         this.editButton.addActionListener(listener);
+    }
+    public void addLogOutButtonListener(ActionListener listener) {
+        this.logOutButton.addActionListener(listener);
     }
     public void addTableEditListener(ActionListener listener) {
         this.excitementUpdateListener = listener;

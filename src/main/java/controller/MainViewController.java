@@ -28,6 +28,11 @@ public class MainViewController {
         this.mainView.addEditButtonListener((ActionEvent e) -> {
             handleEditJobApplication();
         });
+        this.mainView.addLogOutButtonListener((ActionEvent e) -> {
+            handleLogOut();
+        });
+        
+        
         mainView.addTableEditListener(e -> {
             if (e.getSource() instanceof JobApplication) {
                 JobApplication updatedJob = (JobApplication) e.getSource();
@@ -68,5 +73,9 @@ public class MainViewController {
         } else {
             JOptionPane.showMessageDialog(null, "Please select a job application to edit.");
         }
+    }
+    private void handleLogOut(){
+        this.mainController.logOutUser();
+        this.mainController.showLoginView();
     }
 }

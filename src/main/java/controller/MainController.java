@@ -34,6 +34,9 @@ public class MainController {
     public int getLoggedUserId(){
         return this.loggedUserID;
     }
+    public void logOutUser(){
+        this.loggedUserID = -1;
+    }
 
     // Method to show login view
     public void showLoginView() {
@@ -82,6 +85,8 @@ public class MainController {
 
     // Helper method to dispose of the current view if it exists
     private void disposeCurrentView() {
+        this.disposeAddView();
+        this.disposeEditView();
         if (loginView != null) {
             loginView.disposeView();
             loginView = null;
@@ -105,16 +110,18 @@ public class MainController {
             addJAView.disposeView();
             addJAView = null;
             addJAController = null;
+            mainViewController.loadJobApplications();
         }
-        mainViewController.loadJobApplications();
+       
     }
     public void disposeEditView(){
         if (editView != null) {
                 editView.disposeView();
                 editView = null;
                 editJAController = null;
+                mainViewController.loadJobApplications();
             }
-        mainViewController.loadJobApplications();
+       
     }
     
 
