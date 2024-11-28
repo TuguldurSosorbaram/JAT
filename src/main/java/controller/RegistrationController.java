@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 public class RegistrationController {
     private RegistrationView registrationView;
     private MainController mainController;
+    
+    private boolean testMode = false;
 
     public RegistrationController(RegistrationView registrationView, MainController mainController) {
         this.registrationView = registrationView;
@@ -73,12 +75,19 @@ public class RegistrationController {
         }
 
         try {
-            // Save the new user to the database
-            DatabaseHelper.registerUser(newUsername, newPassword);
-            mainController.showLoginView();
+            if(DatabaseHelper.registerUser(newUsername, newPassword)){
+                mainController.showLoginView();
+            }else{
+                registrationView.setUsernameError("This username is already taken.");
+            }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            if (!testMode) {
+                ex.printStackTrace();
+            }
             registrationView.setUsernameError("Registration failed! Please try again.");
         }
+    }
+    public void enableTestMode() {
+        this.testMode = true;
     }
 }

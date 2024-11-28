@@ -1,0 +1,6 @@
+ControllerTest\MainControllerTest.class
+ControllerTest\AddJobApplicationControllerTest.class
+ControllerTest\MainViewControllerTest.class
+ControllerTest\RegistrationControllerTest.class
+ControllerTest\AuthenticationControllerTest.class
+ControllerTest\EditJobApplicationControllerTest.class
