@@ -46,8 +46,7 @@ public class AuthenticationController {
         String password = loginView.getPassword();
 
         try {
-            if (DatabaseHelper.validateUser(username, password) 
-                    && DatabaseHelper.getUserIdByUsername(username) != -1) {
+            if (DatabaseHelper.validateUser(username, password)) {
                 
                 mainController.showMainView(DatabaseHelper.getUserIdByUsername(username)); 
             } else {

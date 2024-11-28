@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: ControllerTest.RegistrationControllerTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.404 s -- in ControllerTest.RegistrationControllerTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.245 s -- in ControllerTest.RegistrationControllerTest

@@ -137,4 +137,7 @@ public class AddJobApplicationView {
     public void disposeView() {
         dialog.dispose();
     }
+    public void showErrorDialog(String errorText){
+        JOptionPane.showMessageDialog(null, errorText);
+    }
 }

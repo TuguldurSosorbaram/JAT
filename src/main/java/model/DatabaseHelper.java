@@ -113,6 +113,8 @@ public class DatabaseHelper {
             pstmt.setInt(10, job.getExcitement());
             pstmt.setInt(11, job.getUserId());
             pstmt.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
     }
     public static void updateJobApplication(JobApplication job) {

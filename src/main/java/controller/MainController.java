@@ -126,7 +126,7 @@ public class MainController {
     
 
     // Additional utility methods like logging errors or notifications
-    protected void showError(String message) {
+    public void showError(String message) {
         JOptionPane.showMessageDialog(null, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 

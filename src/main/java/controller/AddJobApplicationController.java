@@ -54,7 +54,9 @@ public class AddJobApplicationController {
             this.mainController.disposeAddView(); // Close the add form
         } catch (SQLException ex) {
             Logger.getLogger(AddJobApplicationController.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Error saving job application.");
+            this.addJobView.showErrorDialog("Error saving job application.");
         }
     }
+    
+    
 }
