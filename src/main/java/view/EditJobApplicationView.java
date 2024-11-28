@@ -125,4 +125,7 @@ public class EditJobApplicationView {
     public void disposeView() {
         dialog.dispose();
     }
+    public void showDialog(String Text){
+        JOptionPane.showMessageDialog(null, Text);
+    }
 }

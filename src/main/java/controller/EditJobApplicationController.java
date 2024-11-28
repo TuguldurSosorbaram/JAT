@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.DatabaseHelper;
 import model.JobApplication;
 import view.EditJobApplicationView;
@@ -39,10 +41,9 @@ public class EditJobApplicationController {
 
             // Close the view after saving
             this.mainController.disposeEditView();
-            JOptionPane.showMessageDialog(null, "Job application updated successfully.");
+            this.editView.showDialog("Job application updated successfully.");
         } catch (Exception ex) {
-            ex.printStackTrace();
-            //JOptionPane.showMessageDialog(editView.getDialog(), "Error updating job application: " + ex.getMessage());
+            this.editView.showDialog("Error updating job application.");
         }
     }
 }

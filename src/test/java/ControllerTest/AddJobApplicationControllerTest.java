@@ -38,8 +38,6 @@ class AddJobApplicationControllerTest {
         // Create controller with mocked dependencies
         controller = new AddJobApplicationController(mockView, mockMainController);
         
-        Logger logger = Logger.getLogger(AddJobApplicationController.class.getName());
-        logger.setLevel(Level.OFF); // Disable all logging for this logger during tests
     }
 
     @Test

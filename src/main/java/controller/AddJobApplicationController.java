@@ -7,9 +7,6 @@ import model.DatabaseHelper;
 import view.AddJobApplicationView;
 
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 public class AddJobApplicationController {
     private AddJobApplicationView addJobView;
@@ -53,7 +50,6 @@ public class AddJobApplicationController {
             DatabaseHelper.addJobApplication(newJob); // Save to database
             this.mainController.disposeAddView(); // Close the add form
         } catch (SQLException ex) {
-            Logger.getLogger(AddJobApplicationController.class.getName()).log(Level.SEVERE, null, ex);
             this.addJobView.showErrorDialog("Error saving job application.");
         }
     }
