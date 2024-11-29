@@ -1,4 +1,4 @@
-ControllerTest\MainControllerTest.class
+modelTest\JobApplicationTest.class
 ControllerTest\AddJobApplicationControllerTest.class
 ControllerTest\MainViewControllerTest.class
 ControllerTest\RegistrationControllerTest.class

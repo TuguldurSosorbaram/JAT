@@ -335,7 +335,10 @@ public class MainView {
             excitementUpdateListener.actionPerformed(new ActionEvent(job, ActionEvent.ACTION_PERFORMED, "UpdateExcitement"));
         }
     }
-
+    public void showMessage(JFrame parent, String text){
+        JOptionPane.showMessageDialog(parent, text);
+    }
+    
     public void showView() {
         frame.setVisible(true);
     }

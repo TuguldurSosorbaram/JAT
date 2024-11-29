@@ -168,7 +168,7 @@ public class DatabaseHelper {
                 applications.add(job);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error retrieving job applications for user: " + userId, e);
         }
         return applications;
     }

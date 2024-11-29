@@ -39,8 +39,7 @@ public class MainViewController {
                 try {
                     DatabaseHelper.updateJobApplication(updatedJob);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(mainView.getFrame(), "Failed to update excitement in the database.");
+                    mainView.showMessage(mainView.getFrame(), "Failed to update excitement in the database.");
                 }
             }
         });
@@ -51,10 +50,12 @@ public class MainViewController {
         try {
             List<JobApplication> applications = 
                     DatabaseHelper.getJobApplicationsByUser(this.mainController.getLoggedUserId());
+            if (applications == null) {
+                applications = List.of(); 
+            }
             mainView.setJobApplications(applications);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error loading job applications.");
+        }catch (Exception e) {
+            this.mainView.showMessage(mainView.getFrame(), "Error loading job applications.");
         }
     }
 
@@ -71,7 +72,7 @@ public class MainViewController {
             JobApplication selectedJob = mainView.getSelectedJobApplication();
             mainController.showEditJobApplication(selectedJob);
         } else {
-            JOptionPane.showMessageDialog(null, "Please select a job application to edit.");
+            this.mainView.showMessage(null, "Please select a job application to edit.");
         }
     }
     private void handleLogOut(){
