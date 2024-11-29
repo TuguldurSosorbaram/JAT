@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: viewTest.RegistrationViewTest
+Test set: viewTest.AddJobApplicationViewTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.109 s -- in viewTest.RegistrationViewTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.519 s -- in viewTest.AddJobApplicationViewTest

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="viewTest.RegistrationViewTest" time="0.109" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="viewTest.MainViewTest" time="0.475" tests="8" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="20"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -61,12 +61,12 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="64.0"/>
   </properties>
-  <testcase name="testGetPassword" classname="viewTest.RegistrationViewTest" time="0.026"/>
-  <testcase name="testViewVisibilityControls" classname="viewTest.RegistrationViewTest" time="0.013"/>
-  <testcase name="testAddRegisterListener" classname="viewTest.RegistrationViewTest" time="0.012"/>
-  <testcase name="testAddBackToLoginListener" classname="viewTest.RegistrationViewTest" time="0.009"/>
-  <testcase name="testSetPasswordError" classname="viewTest.RegistrationViewTest" time="0.012"/>
-  <testcase name="testGetUsername" classname="viewTest.RegistrationViewTest" time="0.009"/>
-  <testcase name="testSetUsernameError" classname="viewTest.RegistrationViewTest" time="0.01"/>
-  <testcase name="testClearErrors" classname="viewTest.RegistrationViewTest" time="0.011"/>
+  <testcase name="testAddEditButtonListener" classname="viewTest.MainViewTest" time="0.226"/>
+  <testcase name="testViewVisibilityControls" classname="viewTest.MainViewTest" time="0.066"/>
+  <testcase name="testGetSelectedRow_NoSelection" classname="viewTest.MainViewTest" time="0.028"/>
+  <testcase name="testGetSelectedJobApplication_NoSelection" classname="viewTest.MainViewTest" time="0.029"/>
+  <testcase name="testAddTableEditListenerAndTrigger" classname="viewTest.MainViewTest" time="0.026"/>
+  <testcase name="testAddAddButtonListener" classname="viewTest.MainViewTest" time="0.029"/>
+  <testcase name="testSetJobApplications" classname="viewTest.MainViewTest" time="0.044"/>
+  <testcase name="testAddLogOutButtonListener" classname="viewTest.MainViewTest" time="0.024"/>
 </testsuite>

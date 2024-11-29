@@ -53,7 +53,6 @@ public class AuthenticationController {
                 mainController.showError("Login failed! Please check your credentials.");
             }
         } catch (Exception ex) {
-            ex.printStackTrace();
             mainController.showError("An error occurred during login.");
         }
     }

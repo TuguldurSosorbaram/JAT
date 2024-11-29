@@ -135,7 +135,7 @@ public class MainView {
         frame.add(scrollPane, BorderLayout.CENTER);
 
         frame.pack();
-        frame.setVisible(true);
+        frame.setVisible(false);
     }
 
     private void customizeTableAppearance(JTable table) {

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: viewTest.RegistrationViewTest
+Test set: unitTest.modelTest.UserTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.109 s -- in viewTest.RegistrationViewTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s -- in unitTest.modelTest.UserTest
