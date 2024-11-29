@@ -212,6 +212,32 @@ public class DatabaseHelper {
             }
         }
     }
+    public static void deleteJobApplication(JobApplication jobToDelete) {
+        String sql = "DELETE FROM job_applications WHERE id = ? AND user_id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = SQLiteConnection.connect(); // Get connection
+            pstmt = conn.prepareStatement(sql);
+
+            // Set parameters
+            pstmt.setInt(1, jobToDelete.getId()); // Job application ID
+            pstmt.setInt(2, jobToDelete.getUserId()); // User ID to ensure ownership
+
+            // Execute the delete operation
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log any exceptions
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close(); // Close PreparedStatement
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close connection only if not in test mode
+            } catch (SQLException ex) {
+                ex.printStackTrace(); // Handle errors during cleanup
+            }
+        }
+    }
 
     public static List<JobApplication> getJobApplicationsByUser(int userId) {
         List<JobApplication> applications = new ArrayList<>();

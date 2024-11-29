@@ -28,6 +28,9 @@ public class MainViewController {
         this.mainView.addEditButtonListener((ActionEvent e) -> {
             handleEditJobApplication();
         });
+        this.mainView.addDeleteButtonListener((ActionEvent e) -> {
+            handleDeleteJobApplication();
+        });
         this.mainView.addLogOutButtonListener((ActionEvent e) -> {
             handleLogOut();
         });
@@ -73,6 +76,25 @@ public class MainViewController {
             mainController.showEditJobApplication(selectedJob);
         } else {
             this.mainView.showMessage(null, "Please select a job application to edit.");
+        }
+    }
+    private void handleDeleteJobApplication(){
+        int selectedRow = mainView.getSelectedRow();
+        if (selectedRow >= 0) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    mainView.getFrame(),
+                    "Are you sure you want to delete the selected job application?",
+                    "Confirm Deletion",
+            JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                JobApplication jobToDelete = mainView.getSelectedJobApplication();
+                if (jobToDelete != null) {
+                    DatabaseHelper.deleteJobApplication(jobToDelete);
+                    loadJobApplications();
+                }
+            }
+        } else {
+            this.mainView.showMessage(null, "Please select a job application to delete.");
         }
     }
     private void handleLogOut(){
