@@ -7,12 +7,15 @@ import utils.SQLiteConnection;
 
 public class DatabaseHelper {
     private static final String DATABASE_URL = "jdbc:sqlite:jobTracker.db";
-
+    
     // Initialize the SQLite database
     public static void initializeDatabase() {
-        try (Connection conn = SQLiteConnection.connect()) {
+        Connection conn = null;
+        Statement stmt = null; 
+        try {
+            conn = SQLiteConnection.connect();
             if (conn != null) {
-                Statement stmt = conn.createStatement();
+                stmt = conn.createStatement();
 
                 // Create table for users
                 stmt.execute("CREATE TABLE IF NOT EXISTS users (" +
@@ -39,45 +42,80 @@ public class DatabaseHelper {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close in production
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
     // Add a new user to the database
     public static void addUser(User user) throws SQLException {
         String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
-
-        try (Connection conn = SQLiteConnection.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        
+        try {
+            conn = SQLiteConnection.connect(); // Get connection
+            pstmt = conn.prepareStatement(sql);
+            
             pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.executeUpdate();
+        }finally{
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     // Validate user credentials
     public static boolean validateUser(String username, String password) throws SQLException {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-        try (Connection conn = SQLiteConnection.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = SQLiteConnection.connect(); // Get connection
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
             pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery();
 
             return rs.next();  // True if user exists
+        } finally {
+            try {
+                if (rs != null) rs.close(); // Close ResultSet
+                if (pstmt != null) pstmt.close(); // Close PreparedStatement
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close connection only if not in test mode
+            } catch (SQLException e) {
+                e.printStackTrace(); // Log any errors during cleanup
+            }
         }
     }
     public static boolean registerUser(String newUsername, String newPassword) {
         String checkUserSql = "SELECT * FROM users WHERE username = ?";
         String insertUserSql = "INSERT INTO users(username, password) VALUES(?, ?)";
+        Connection conn = null;
+        PreparedStatement checkStmt = null;
+        PreparedStatement insertStmt = null;
+        ResultSet rs = null;
 
-        try (Connection conn = SQLiteConnection.connect();
-             PreparedStatement checkStmt = conn.prepareStatement(checkUserSql);
-             PreparedStatement insertStmt = conn.prepareStatement(insertUserSql)) {
+        try {
+            conn = SQLiteConnection.connect();
+            checkStmt = conn.prepareStatement(checkUserSql);
+            insertStmt = conn.prepareStatement(insertUserSql);
 
             // Check if the username already exists
             checkStmt.setString(1, newUsername);
-            ResultSet rs = checkStmt.executeQuery();
+            rs = checkStmt.executeQuery();
 
             if (rs.next()) {
                 // Username already exists
@@ -92,15 +130,28 @@ public class DatabaseHelper {
         } catch (SQLException e) {
             e.printStackTrace();
             return false; // Registration failed due to an exception
+        } finally {
+            try {
+                if (rs != null) rs.close(); // Close ResultSet
+                if (checkStmt != null) checkStmt.close(); // Close PreparedStatement
+                if (insertStmt != null) insertStmt.close(); // Close PreparedStatement
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close connection only if not in test mode
+            } catch (SQLException ex) {
+                ex.printStackTrace(); // Handle errors during cleanup
+            }
         }
     }
+
     // Add a new job application to the database
     public static void addJobApplication(JobApplication job) throws SQLException {
         String sql = "INSERT INTO job_applications(position, company_name, salary_approximation, location, status, " +
-                "date_saved, deadline, date_applied, follow_up, excitement, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                     "date_saved, deadline, date_applied, follow_up, excitement, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
-        try (Connection conn = SQLiteConnection.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = SQLiteConnection.connect(); // Get connection
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, job.getPosition());
             pstmt.setString(2, job.getCompanyName());
             pstmt.setInt(3, job.getSalaryApproximation());
@@ -113,16 +164,28 @@ public class DatabaseHelper {
             pstmt.setInt(10, job.getExcitement());
             pstmt.setInt(11, job.getUserId());
             pstmt.executeUpdate();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            throw e; // Re-throw exception to let the caller handle it
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close(); // Close PreparedStatement
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close connection only if not in test mode
+            } catch (SQLException ex) {
+                ex.printStackTrace(); // Handle errors during cleanup
+            }
         }
     }
+
     public static void updateJobApplication(JobApplication job) {
         String sql = "UPDATE job_applications SET position = ?, company_name = ?, salary_approximation = ?, location = ?, status = ?, " +
                      "date_saved = ?, deadline = ?, date_applied = ?, follow_up = ?, excitement = ? WHERE id = ? and user_id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
 
-        try (Connection conn = SQLiteConnection.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = SQLiteConnection.connect(); // Get connection
+            pstmt = conn.prepareStatement(sql);
 
             pstmt.setString(1, job.getPosition());
             pstmt.setString(2, job.getCompanyName());
@@ -139,17 +202,29 @@ public class DatabaseHelper {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Log any exceptions
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close(); // Close PreparedStatement
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close connection only if not in test mode
+            } catch (SQLException ex) {
+                ex.printStackTrace(); // Handle errors during cleanup
+            }
         }
     }
+
     public static List<JobApplication> getJobApplicationsByUser(int userId) {
         List<JobApplication> applications = new ArrayList<>();
         String sql = "SELECT * FROM job_applications WHERE user_id = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-        try (Connection conn = SQLiteConnection.connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try {
+            conn = SQLiteConnection.connect(); // Get connection
+            pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, userId);
-            ResultSet rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 JobApplication job = new JobApplication();
@@ -169,22 +244,44 @@ public class DatabaseHelper {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving job applications for user: " + userId, e);
+        } finally {
+            try {
+                if (rs != null) rs.close(); // Close ResultSet
+                if (pstmt != null) pstmt.close(); // Close PreparedStatement
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close connection only if not in test mode
+            } catch (SQLException ex) {
+                ex.printStackTrace(); // Log errors during cleanup
+            }
         }
         return applications;
     }
+
     public static int getUserIdByUsername(String username) {
         String sql = "SELECT id FROM users WHERE username = ?";
-        try (Connection conn = SQLiteConnection.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = SQLiteConnection.connect(); // Get connection
+            pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("id"); // Return the user ID
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close(); // Close ResultSet
+                if (pstmt != null) pstmt.close(); // Close PreparedStatement
+                if (conn != null && !SQLiteConnection.isTestMode()) conn.close(); // Close connection only if not in test mode
+            } catch (SQLException ex) {
+                ex.printStackTrace(); // Handle errors during cleanup
+            }
         }
-        return -1;
+        return -1; // Return -1 if user is not found or an error occurs
     }
 
 }

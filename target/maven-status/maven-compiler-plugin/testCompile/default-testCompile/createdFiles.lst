@@ -1,6 +1,8 @@
 modelTest\JobApplicationTest.class
 ControllerTest\AddJobApplicationControllerTest.class
-ControllerTest\MainViewControllerTest.class
 ControllerTest\RegistrationControllerTest.class
-ControllerTest\AuthenticationControllerTest.class
 ControllerTest\EditJobApplicationControllerTest.class
+ControllerTest\MainViewControllerTest.class
+modelTest\UserTest.class
+modelTest\DatabaseHelperTest.class
+ControllerTest\AuthenticationControllerTest.class
