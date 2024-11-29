@@ -60,7 +60,7 @@ public class RegistrationView {
         // Add components to the main panel
         placeComponents(mainPanel);
 
-        frame.setVisible(true);
+        frame.setVisible(false);
     }
 
     private void placeComponents(JPanel panel) {
@@ -138,6 +138,7 @@ public class RegistrationView {
         backToLoginLabel.setForeground(new Color(66, 135, 245));
         backToLoginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panel.add(backToLoginLabel);
+        this.hideView();
     }
 
     // Method to make the registration view visible

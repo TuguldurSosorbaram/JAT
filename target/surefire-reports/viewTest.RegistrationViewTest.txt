@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: viewTest.RegistrationViewTest
+-------------------------------------------------------------------------------
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.154 s -- in viewTest.RegistrationViewTest

@@ -121,6 +121,7 @@ public class LoginView {
         registerLabel.setForeground(new Color(66, 135, 245));
         registerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));  // Change cursor to hand when hovering
         panel.add(registerLabel);
+        this.hideView();
     }
     
     public void showView() {
@@ -152,4 +153,5 @@ public class LoginView {
         usernameField.addKeyListener(listener);
         passwordField.addKeyListener(listener);
     }
+    
 }

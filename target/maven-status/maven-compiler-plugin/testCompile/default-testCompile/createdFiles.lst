@@ -2,7 +2,11 @@ modelTest\JobApplicationTest.class
 ControllerTest\AddJobApplicationControllerTest.class
 ControllerTest\RegistrationControllerTest.class
 ControllerTest\EditJobApplicationControllerTest.class
+viewTest\RegistrationViewTest$1.class
+viewTest\RegistrationViewTest.class
+viewTest\loginViewTest.class
 ControllerTest\MainViewControllerTest.class
+viewTest\TestUtils.class
 modelTest\UserTest.class
 modelTest\DatabaseHelperTest.class
 ControllerTest\AuthenticationControllerTest.class
