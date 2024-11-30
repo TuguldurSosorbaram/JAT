@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: unitTest.modelTest.UserTest
+Test set: unitTest.viewTest.MainViewTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.786 s -- in unitTest.modelTest.UserTest
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.564 s -- in unitTest.viewTest.MainViewTest

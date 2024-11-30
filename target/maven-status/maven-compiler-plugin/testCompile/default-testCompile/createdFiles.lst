@@ -8,8 +8,13 @@ unitTest\modelTest\UserTest.class
 unitTest\viewTest\TestUtils.class
 unitTest\viewTest\MainViewTest.class
 unitTest\modelTest\DatabaseHelperTest.class
+integrationTest\EditJobApplicationWorkflowTest.class
 unitTest\viewTest\EditJobApplicationViewTest.class
 unitTest\viewTest\LoginViewTest.class
+integrationTest\DatabaseCrudIntegrationTest.class
 unitTest\viewTest\RegistrationViewTest$1.class
+integrationTest\AddJobApplicationWorkflowTest.class
+integrationTest\LoginWorkflowIntegrationTest.class
+integrationTest\RegistrationWorkflowIntegrationTest.class
 unitTest\controllerTest\AuthenticationControllerTest.class
 unitTest\controllerTest\MainViewControllerTest.class

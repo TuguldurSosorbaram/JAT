@@ -7,7 +7,6 @@ import org.mindrot.jbcrypt.BCrypt;
 import utils.SQLiteConnection;
 
 public class DatabaseHelper {
-    private static final String DATABASE_URL = "jdbc:sqlite:jobTracker.db";
     
     // Initialize the SQLite database
     public static void initializeDatabase() {

@@ -10,7 +10,7 @@ import view.EditJobApplicationView;
 
 
 public class MainController {
-    int loggedUserID;
+    int loggedUserID = -1;
     
     private LoginView loginView;
     private AuthenticationController authController;
