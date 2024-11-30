@@ -3,6 +3,7 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
 import utils.SQLiteConnection;
 
 public class DatabaseHelper {
@@ -63,7 +64,7 @@ public class DatabaseHelper {
             pstmt = conn.prepareStatement(sql);
             
             pstmt.setString(1, user.getUsername());
-            pstmt.setString(2, user.getPassword());
+            pstmt.setString(2, user.getHashedPassword());
             pstmt.executeUpdate();
         }finally{
             try {
@@ -76,8 +77,8 @@ public class DatabaseHelper {
     }
 
     // Validate user credentials
-    public static boolean validateUser(String username, String password) throws SQLException {
-        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+    public static boolean validateUser(String username, String plainPassword) throws SQLException {
+        String sql = "SELECT password FROM users WHERE username = ?";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -86,10 +87,14 @@ public class DatabaseHelper {
             conn = SQLiteConnection.connect(); // Get connection
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, username);
-            pstmt.setString(2, password);
             rs = pstmt.executeQuery();
 
-            return rs.next();  // True if user exists
+            if (rs.next()) {
+                String hashedPassword = rs.getString("password"); // Get hashed password
+                return BCrypt.checkpw(plainPassword, hashedPassword); // Validate password
+            }
+
+            return false; // User not found
         } finally {
             try {
                 if (rs != null) rs.close(); // Close ResultSet
@@ -100,9 +105,10 @@ public class DatabaseHelper {
             }
         }
     }
-    public static boolean registerUser(String newUsername, String newPassword) {
-        String checkUserSql = "SELECT * FROM users WHERE username = ?";
-        String insertUserSql = "INSERT INTO users(username, password) VALUES(?, ?)";
+
+    public static boolean registerUser(String newUsername, String plainPassword) {
+        String checkUserSql = "SELECT 1 FROM users WHERE username = ?";
+        String insertUserSql = "INSERT INTO users (username, password) VALUES (?, ?)";
         Connection conn = null;
         PreparedStatement checkStmt = null;
         PreparedStatement insertStmt = null;
@@ -110,10 +116,9 @@ public class DatabaseHelper {
 
         try {
             conn = SQLiteConnection.connect();
-            checkStmt = conn.prepareStatement(checkUserSql);
-            insertStmt = conn.prepareStatement(insertUserSql);
 
             // Check if the username already exists
+            checkStmt = conn.prepareStatement(checkUserSql);
             checkStmt.setString(1, newUsername);
             rs = checkStmt.executeQuery();
 
@@ -121,9 +126,13 @@ public class DatabaseHelper {
                 // Username already exists
                 return false;
             } else {
-                // Username does not exist, proceed with registration
+                // Hash the password
+                String hashedPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt(12));
+
+                // Insert the new user
+                insertStmt = conn.prepareStatement(insertUserSql);
                 insertStmt.setString(1, newUsername);
-                insertStmt.setString(2, newPassword);
+                insertStmt.setString(2, hashedPassword);
                 insertStmt.executeUpdate();
                 return true; // User registered successfully
             }
@@ -141,6 +150,7 @@ public class DatabaseHelper {
             }
         }
     }
+
 
     // Add a new job application to the database
     public static void addJobApplication(JobApplication job) throws SQLException {
