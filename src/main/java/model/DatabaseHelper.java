@@ -6,9 +6,15 @@ import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
 import utils.SQLiteConnection;
 
+/**
+ * DatabaseHelper provides methods to manage database interactions, including 
+ * initialization, user management, and CRUD operations for job applications.
+ */
 public class DatabaseHelper {
     
-    // Initialize the SQLite database
+     /**
+     * Initializes the SQLite database by creating necessary tables if they don't exist.
+     */
     public static void initializeDatabase() {
         Connection conn = null;
         Statement stmt = null; 
@@ -23,7 +29,7 @@ public class DatabaseHelper {
                         "username TEXT NOT NULL UNIQUE, " +
                         "password TEXT NOT NULL)");
 
-                // Create table for job applications with the specified columns
+                // Create table for job applications
                 stmt.execute("CREATE TABLE IF NOT EXISTS job_applications (" +
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "position TEXT, " +
@@ -52,7 +58,9 @@ public class DatabaseHelper {
         }
     }
 
-    // Add a new user to the database
+    /**
+     * Adds a new user to the database.
+     */
     public static void addUser(User user) throws SQLException {
         String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
         Connection conn = null;
@@ -75,7 +83,11 @@ public class DatabaseHelper {
         }
     }
 
-    // Validate user credentials
+    /**
+     * Validates user credentials by comparing the hashed password.
+     *
+     * @return true if the username and password are valid, false otherwise.
+     */
     public static boolean validateUser(String username, String plainPassword) throws SQLException {
         String sql = "SELECT password FROM users WHERE username = ?";
         Connection conn = null;
@@ -104,7 +116,11 @@ public class DatabaseHelper {
             }
         }
     }
-
+    /**
+     * Registers a new user in the database if the username is unique.
+     *
+     * @return true if registration is successful, false otherwise.
+     */
     public static boolean registerUser(String newUsername, String plainPassword) {
         String checkUserSql = "SELECT 1 FROM users WHERE username = ?";
         String insertUserSql = "INSERT INTO users (username, password) VALUES (?, ?)";
@@ -151,7 +167,9 @@ public class DatabaseHelper {
     }
 
 
-    // Add a new job application to the database
+    /**
+     * Adds a new job application to the database.
+     */
     public static void addJobApplication(JobApplication job) throws SQLException {
         String sql = "INSERT INTO job_applications(position, company_name, salary_approximation, location, status, " +
                      "date_saved, deadline, date_applied, follow_up, excitement, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -185,7 +203,9 @@ public class DatabaseHelper {
             }
         }
     }
-
+    /**
+     * Updates an existing job application in the database.
+     */
     public static void updateJobApplication(JobApplication job) {
         String sql = "UPDATE job_applications SET position = ?, company_name = ?, salary_approximation = ?, location = ?, status = ?, " +
                      "date_saved = ?, deadline = ?, date_applied = ?, follow_up = ?, excitement = ? WHERE id = ? and user_id = ?";
@@ -221,6 +241,9 @@ public class DatabaseHelper {
             }
         }
     }
+    /**
+     * Deletes a job application from the database.
+     */
     public static void deleteJobApplication(JobApplication jobToDelete) {
         String sql = "DELETE FROM job_applications WHERE id = ? AND user_id = ?";
         Connection conn = null;
@@ -247,7 +270,12 @@ public class DatabaseHelper {
             }
         }
     }
-
+    /**
+     * Retrieves all job applications for a specific user.
+     *
+     * @param userId the user ID to filter job applications.
+     * @return a list of job applications.
+     */
     public static List<JobApplication> getJobApplicationsByUser(int userId) {
         List<JobApplication> applications = new ArrayList<>();
         String sql = "SELECT * FROM job_applications WHERE user_id = ?";
@@ -256,7 +284,7 @@ public class DatabaseHelper {
         ResultSet rs = null;
 
         try {
-            conn = SQLiteConnection.connect(); // Get connection
+            conn = SQLiteConnection.connect();
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, userId);
             rs = pstmt.executeQuery();
@@ -290,7 +318,12 @@ public class DatabaseHelper {
         }
         return applications;
     }
-
+    /**
+     * Retrieves the user ID based on the username.
+     *
+     * @param username the username to search for.
+     * @return the user ID if found, -1 otherwise.
+     */
     public static int getUserIdByUsername(String username) {
         String sql = "SELECT id FROM users WHERE username = ?";
         Connection conn = null;

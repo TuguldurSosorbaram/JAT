@@ -20,6 +20,11 @@ import java.util.List;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.TableRowSorter;
 
+/**
+ * MainView is the primary user interface for managing job applications.
+ * It displays job applications in a table and provides functionality for adding,
+ * editing, deleting, and sorting applications.
+ */
 public class MainView {
     private JFrame frame;
     private JTable jobTable;
@@ -30,10 +35,13 @@ public class MainView {
     private JButton logOutButton;
     private JButton deleteButton;
     private JScrollPane scrollPane;
-    
+
     ActionListener excitementUpdateListener;
     private boolean isRendererEditorSet = false;
-    
+
+    /**
+     * Comparator for sorting numeric values.
+     */
     public static final Comparator<Object> NUMERIC_COMPARATOR = (o1, o2) -> {
         if (o1 instanceof Integer && o2 instanceof Integer) {
             return ((Integer) o1).compareTo((Integer) o2);
@@ -41,34 +49,41 @@ public class MainView {
         return 0;
     };
 
+    /**
+     * Comparator for sorting dates.
+     */
     public static final Comparator<Object> DATE_COMPARATOR = (o1, o2) -> {
         if (o1 instanceof java.sql.Date && o2 instanceof java.sql.Date) {
             return ((java.sql.Date) o1).compareTo((java.sql.Date) o2);
         }
         return 0;
     };
-    public static final Comparator<Object> STATUS_COMPARATOR = (o1, o2) -> {
-        String[] statusOptions = {"Saved", "Applying", "Applied", "Interviewing", 
-                                   "Negotiating", "Accepted", "I withdrew", 
-                                   "No response", "Rejected"};
 
-        // Get the index of each status in the array
+    /**
+     * Comparator for sorting job application statuses based on predefined order.
+     */
+    public static final Comparator<Object> STATUS_COMPARATOR = (o1, o2) -> {
+        String[] statusOptions = {"Saved", "Applying", "Applied", "Interviewing",
+                "Negotiating", "Accepted", "I withdrew",
+                "No response", "Rejected"};
+
         int index1 = java.util.Arrays.asList(statusOptions).indexOf(o1);
         int index2 = java.util.Arrays.asList(statusOptions).indexOf(o2);
 
-        // Handle cases where the status is not found (e.g., null or invalid values)
         if (index1 == -1 && index2 == -1) {
-            return 0; // Both are not found, consider equal
+            return 0;
         } else if (index1 == -1) {
-            return 1; // Unrecognized status should come after recognized ones
+            return 1;
         } else if (index2 == -1) {
-            return -1; // Unrecognized status should come after recognized ones
+            return -1;
         }
 
-        // Compare based on the order in the statusOptions array
         return Integer.compare(index1, index2);
     };
 
+    /**
+     * Constructs the MainView, setting up the frame, table, and buttons.
+     */
     public MainView() {
         // Frame setup
         frame = new JFrame("Job Application Tracker");
@@ -76,60 +91,34 @@ public class MainView {
         frame.setMinimumSize(new Dimension(900, 600));
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setLayout(new BorderLayout());
-        
-        //Parent panel for header and buttons
+
+        // North panel with header and buttons
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
-        
-        // Header panel
+
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        headerPanel.setBackground(new Color(52, 152, 219)); // Light blue color
+        headerPanel.setBackground(new Color(52, 152, 219));
         JLabel headerLabel = new JLabel("Job Application Tracker");
         headerLabel.setFont(new Font("Inter", Font.BOLD, 24));
         headerLabel.setForeground(Color.WHITE);
         headerPanel.add(headerLabel);
-        // Add headerPanel to the top of the northPanel
         northPanel.add(headerPanel);
 
-        // Button panel (placed above the table)
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setBackground(new Color(236, 240, 241)); // Light grey background
+        buttonPanel.setBackground(new Color(236, 240, 241));
 
-        addButton = new MyButton("Add a New Job");
-        ImageIcon addIcon = new ImageIcon(getClass().getResource("/icons/add_icon.png"));
-        addButton.setIcon(new ImageIcon(addIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        addButton.setPreferredSize(new Dimension(200, 30)); // Set a longer size (adjust dimensions as needed)
-        addButton.setBackground(new Color(6,64,43)); // Dark green background
-        addButton.setForeground(Color.WHITE); // White text color for contrast
-        
-        editButton = new MyButton("Edit Selected Job");
-        editButton.setBackground(Color.WHITE);
-        editButton.setForeground(new Color(6,64,43));
-        ImageIcon editIcon = new ImageIcon(getClass().getResource("/icons/edit_icon.png"));
-        editButton.setIcon(new ImageIcon(editIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        editButton.setPreferredSize(new Dimension(200, 30));
-        
-        deleteButton = new MyButton("Delete Selected Job");
-        deleteButton.setBackground(Color.WHITE);
-        deleteButton.setForeground(new Color(6, 64, 43));
-        ImageIcon deleteIcon = new ImageIcon(getClass().getResource("/icons/delete_icon.png"));
-        deleteButton.setIcon(new ImageIcon(deleteIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        deleteButton.setPreferredSize(new Dimension(200, 30));
-        
-        logOutButton = new MyButton("Log Out");
-        logOutButton.setBackground(Color.WHITE);
-        logOutButton.setForeground(new Color(6,64,43));
+        addButton = createButton("Add a New Job", "/icons/add_icon.png", new Color(6, 64, 43), Color.WHITE);
+        editButton = createButton("Edit Selected Job", "/icons/edit_icon.png", Color.WHITE, new Color(6, 64, 43));
+        deleteButton = createButton("Delete Selected Job", "/icons/delete_icon.png", Color.WHITE, new Color(6, 64, 43));
+        logOutButton = createButton("Log Out", null, Color.WHITE, new Color(6, 64, 43));
         logOutButton.setPreferredSize(new Dimension(100, 30));
-        
+
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(logOutButton);
 
-        // Add buttonPanel below the header
         northPanel.add(buttonPanel);
-        
-        // Add the northPanel to the frame
         frame.add(northPanel, BorderLayout.NORTH);
 
         // Table panel
@@ -138,35 +127,56 @@ public class MainView {
         jobTable.setFillsViewportHeight(true);
 
         scrollPane = new JScrollPane(jobTable);
-        // Customize table appearance
         customizeTableAppearance(jobTable);
-        
         frame.add(scrollPane, BorderLayout.CENTER);
 
         frame.pack();
         frame.setVisible(false);
     }
 
-    private void customizeTableAppearance(JTable table) {
-        table.setRowHeight(50); 
+    /**
+     * Creates a custom button with the specified properties.
+     *
+     * @param text       the button text
+     * @param iconPath   the path to the icon (can be null)
+     * @param bgColor    the background color
+     * @param textColor  the text color
+     * @return the customized JButton
+     */
+    private JButton createButton(String text, String iconPath, Color bgColor, Color textColor) {
+        JButton button = new MyButton(text);
+        if (iconPath != null) {
+            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
+            button.setIcon(new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        }
+        button.setPreferredSize(new Dimension(200, 30));
+        button.setBackground(bgColor);
+        button.setForeground(textColor);
+        return button;
+    }
 
-        // Alternating row colors
+    /**
+     * Customizes the appearance of the job application table.
+     *
+     * @param table the JTable to customize
+     */
+    private void customizeTableAppearance(JTable table) {
+        table.setRowHeight(60);
+
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-                label.setFont(new Font("Inter", Font.PLAIN, 16)); // Bigger font
+                label.setFont(new Font("Inter", Font.PLAIN, 16));
                 label.setOpaque(true);
                 label.setHorizontalAlignment(SwingConstants.CENTER);
 
-                if (column == 0 || column == 1) { // Position or Company Name
+                if (column == 0 || column == 1) {
                     label.setText("<html><body style='width: 100%'>" + (value == null ? "-" : value.toString()) + "</body></html>");
                 } else {
                     label.setText(value == null ? "-" : value.toString());
                 }
 
-                // Alternate row colors
                 if (!isSelected) {
                     label.setBackground(row % 2 == 0 ? new Color(245, 245, 245) : Color.WHITE);
                 }
@@ -175,13 +185,13 @@ public class MainView {
             }
         });
 
-        // Header customization
         JTableHeader header = table.getTableHeader();
         header.setResizingAllowed(false);
         header.setFont(new Font("Inter", Font.BOLD, 16));
-        header.setBackground(new Color(200, 200, 200)); // Dark blue
+        header.setBackground(new Color(200, 200, 200));
         header.setPreferredSize(new Dimension(header.getPreferredSize().width, 50));
         setProportionalColumnWidths(table);
+
         scrollPane.setBackground(Color.WHITE);
         scrollPane.addComponentListener(new ComponentAdapter() {
             @Override
@@ -191,78 +201,49 @@ public class MainView {
         });
         scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                int row = table.rowAtPoint(e.getPoint());
-                int column = table.columnAtPoint(e.getPoint());
-                
-                if (row != -1) {
-                    if (column == 9) {
-                        table.editCellAt(row, column); // Force cell editing
-                        Component editor = table.getEditorComponent();
-                        if (editor != null) {
-                            MouseEvent editorClickEvent = SwingUtilities.convertMouseEvent(table, e, editor);
-                            editor.dispatchEvent(editorClickEvent);
-                            editor.requestFocus(); 
-                        }
-                        table.clearSelection();
-                    } else if (column == 4) { // Status column
-                        table.editCellAt(row, column);
-                        Component editor = table.getEditorComponent();
-                        if (editor != null) {
-                            editor.requestFocus();
-                        }
-                        table.clearSelection();
-                    } else {
-                        // Select the row for non-editable columns
-                        table.setRowSelectionInterval(row, row);
-                    }
-                }
-            }
-        });
-        
-        
     }
+
+    // Other methods for managing the view (unchanged)
+
     public void setJobApplications(List<JobApplication> applications) {
         tableModel = new JATableModel(applications);
         jobTable.setModel(tableModel);
-        
-        // Initialize and attach the TableRowSorter
+
         sorter = new TableRowSorter<>(tableModel);
         jobTable.setRowSorter(sorter);
-        
-        sorter.setComparator(2, NUMERIC_COMPARATOR); // Salary column
-        sorter.setComparator(4, STATUS_COMPARATOR); // status column
-        sorter.setComparator(5, DATE_COMPARATOR);    // Date Saved column
-        sorter.setComparator(6, DATE_COMPARATOR);    // Deadline column
-        sorter.setComparator(7, DATE_COMPARATOR);   // date applied
-        sorter.setComparator(8, DATE_COMPARATOR);   // follow-up date
-        
+
+        sorter.setComparator(2, NUMERIC_COMPARATOR);
+        sorter.setComparator(4, STATUS_COMPARATOR);
+        sorter.setComparator(5, DATE_COMPARATOR);
+        sorter.setComparator(6, DATE_COMPARATOR);
+        sorter.setComparator(7, DATE_COMPARATOR);
+        sorter.setComparator(8, DATE_COMPARATOR);
+
         jobTable.getColumnModel().getColumn(9).setCellRenderer(new StarRenderer());
         jobTable.getColumnModel().getColumn(9).setCellEditor(new StarEditor());
-        
-        String[] statusOptions = {"Saved", "Applying", "Applied", "Interviewing", "Negotiating", "Accepted", "I withdrew", "No response", "Rejected"};
-        JComboBox<String> statusDropdown = new JComboBox<>(statusOptions);
-        jobTable.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(statusDropdown));
 
+        JComboBox<String> statusDropdown = new JComboBox<>(new String[]{
+            "Saved", "Applying", "Applied", "Interviewing", "Negotiating", 
+            "Accepted", "I withdrew", "No response", "Rejected"
+        });
+        jobTable.getColumnModel().getColumn(4).setCellEditor(new DefaultCellEditor(statusDropdown));
 
         tableModel.addTableModelListener(e -> {
             if (e.getType() == TableModelEvent.UPDATE) {
                 int row = e.getFirstRow();
                 int column = e.getColumn();
-                
+
                 if (column == 9 || column == 4) {
                     JobApplication updatedJob = tableModel.getJobAt(row);
                     triggerTableEditListener(updatedJob);
                 }
             }
         });
-        
-        jobTable.clearSelection(); // Deselect any selected row
-        scrollPane.getVerticalScrollBar().setValue(0); // Scroll to the top
+
+        jobTable.clearSelection();
+        scrollPane.getVerticalScrollBar().setValue(0);
     }
-    
+
     private void setProportionalColumnWidths(JTable table) {
         int totalWidth = table.getWidth();
         int columnCount = table.getColumnModel().getColumnCount();
@@ -280,37 +261,57 @@ public class MainView {
             0.1f   // Excitement
         };
 
-        // Set each column's preferred width proportionally
         for (int i = 0; i < columnCount; i++) {
             table.getColumnModel().getColumn(i).setPreferredWidth(Math.round(columnWidthPercentage[i] * totalWidth));
         }
     }
-    public class MyButton extends JButton {
-        public MyButton(String text ) {
-            super(text);
-            setOpaque(false);
-            setFont(new Font("Inter", Font.PLAIN, 16));
-            setFocusPainted(false);
-            setBorder(BorderFactory.createEmptyBorder());
+
+    // Button and table listeners (unchanged)
+
+    public void addAddButtonListener(ActionListener listener) {
+        this.addButton.addActionListener(listener);
+    }
+
+    public void addEditButtonListener(ActionListener listener) {
+        this.editButton.addActionListener(listener);
+    }
+
+    public void addLogOutButtonListener(ActionListener listener) {
+        this.logOutButton.addActionListener(listener);
+    }
+
+    public void addDeleteButtonListener(ActionListener listener) {
+        this.deleteButton.addActionListener(listener);
+    }
+
+    public void addTableEditListener(ActionListener listener) {
+        this.excitementUpdateListener = listener;
+    }
+
+    public void triggerTableEditListener(JobApplication job) {
+        if (excitementUpdateListener != null) {
+            excitementUpdateListener.actionPerformed(new ActionEvent(job, ActionEvent.ACTION_PERFORMED, "UpdateExcitement"));
         }
+    }
 
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    public void showMessage(JFrame parent, String text) {
+        JOptionPane.showMessageDialog(parent, text);
+    }
 
-            // Fill rounded rectangle
-            g2.setColor(getBackground());
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+    public void showView() {
+        frame.setVisible(true);
+    }
 
-            g2.setColor(new Color(6,64,63)); // Set border color
-            g2.setStroke(new BasicStroke(2)); // Set border thickness
-            g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 30, 30);
-            
-            // Draw button text
-            super.paintComponent(g2);
-            g2.dispose();
-        }
+    public void hideView() {
+        frame.setVisible(false);
+    }
+
+    public void disposeView() {
+        frame.dispose();
+    }
+
+    public JFrame getFrame() {
+        return this.frame;
     }
 
     public int getSelectedRow() {
@@ -326,44 +327,32 @@ public class MainView {
         return null;
     }
 
-    public void addAddButtonListener(ActionListener listener) {
-        this.addButton.addActionListener(listener);
-    }
-
-    public void addEditButtonListener(ActionListener listener) {
-        this.editButton.addActionListener(listener);
-    }
-    public void addLogOutButtonListener(ActionListener listener) {
-        this.logOutButton.addActionListener(listener);
-    }
-    public void addDeleteButtonListener(ActionListener listener) {
-        this.deleteButton.addActionListener(listener);
-    }
-    public void addTableEditListener(ActionListener listener) {
-        this.excitementUpdateListener = listener;
-    }
-    public void triggerTableEditListener(JobApplication job){
-        if(excitementUpdateListener != null) {
-            excitementUpdateListener.actionPerformed(new ActionEvent(job, ActionEvent.ACTION_PERFORMED, "UpdateExcitement"));
+    /**
+     * Custom button with rounded corners and a border.
+     */
+    public class MyButton extends JButton {
+        public MyButton(String text) {
+            super(text);
+            setOpaque(false);
+            setFont(new Font("Inter", Font.PLAIN, 16));
+            setFocusPainted(false);
+            setBorder(BorderFactory.createEmptyBorder());
         }
-    }
-    public void showMessage(JFrame parent, String text){
-        JOptionPane.showMessageDialog(parent, text);
-    }
-    
-    public void showView() {
-        frame.setVisible(true);
-    }
 
-    public void hideView() {
-        frame.setVisible(false);
-    }
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    public void disposeView() {
-        frame.dispose();
-    }
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
 
-    public JFrame getFrame() {
-        return this.frame;
+            g2.setColor(new Color(6, 64, 63));
+            g2.setStroke(new BasicStroke(2));
+            g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, 30, 30);
+
+            super.paintComponent(g2);
+            g2.dispose();
+        }
     }
 }

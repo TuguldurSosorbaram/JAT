@@ -16,59 +16,60 @@ public class MainViewController {
         this.mainView = mainView;
         this.mainController = mainController;
 
-        // Display all job applications on startup
+        // Load all job applications when the application starts
         loadJobApplications();
 
-        // Add action listener for the Add Job button
-        this.mainView.addAddButtonListener((ActionEvent e) -> {
-            handleAddJobApplication();
-        });
+        // Set up action listener for the Add Job button
+        this.mainView.addAddButtonListener((ActionEvent e) -> handleAddJobApplication());
 
-        // Add action listener for the Edit Job button
-        this.mainView.addEditButtonListener((ActionEvent e) -> {
-            handleEditJobApplication();
-        });
-        this.mainView.addDeleteButtonListener((ActionEvent e) -> {
-            handleDeleteJobApplication();
-        });
-        this.mainView.addLogOutButtonListener((ActionEvent e) -> {
-            handleLogOut();
-        });
-        
-        
+        // Set up action listener for the Edit Job button
+        this.mainView.addEditButtonListener((ActionEvent e) -> handleEditJobApplication());
+
+        // Set up action listener for the Delete Job button
+        this.mainView.addDeleteButtonListener((ActionEvent e) -> handleDeleteJobApplication());
+
+        // Set up action listener for the Log Out button
+        this.mainView.addLogOutButtonListener((ActionEvent e) -> handleLogOut());
+
+        // Handle in-line edits for job applications in the table
         mainView.addTableEditListener(e -> {
             if (e.getSource() instanceof JobApplication) {
                 JobApplication updatedJob = (JobApplication) e.getSource();
                 try {
                     DatabaseHelper.updateJobApplication(updatedJob);
                 } catch (Exception ex) {
-                    mainView.showMessage(mainView.getFrame(), "Failed to update excitement in the database.");
+                    mainView.showMessage(mainView.getFrame(), "Failed to update the database.");
                 }
             }
         });
     }
 
-    // Load job applications from the database and display them in the view
+    /**
+     * Loads job applications from the database and displays them in the view.
+     */
     public void loadJobApplications() {
         try {
-            List<JobApplication> applications = 
+            List<JobApplication> applications =
                     DatabaseHelper.getJobApplicationsByUser(this.mainController.getLoggedUserId());
             if (applications == null) {
-                applications = List.of(); 
+                applications = List.of();
             }
             mainView.setJobApplications(applications);
-        }catch (Exception e) {
+        } catch (Exception e) {
             this.mainView.showMessage(mainView.getFrame(), "Error loading job applications.");
         }
     }
 
-    // Handle adding a new job application
+    /**
+     * Opens the view to add a new job application.
+     */
     private void handleAddJobApplication() {
         mainController.showAddJobApplication();
     }
 
-
-    // Handle editing the selected job application
+    /**
+     * Opens the view to edit the selected job application.
+     */
     private void handleEditJobApplication() {
         int selectedRow = mainView.getSelectedRow();
         if (selectedRow >= 0) {
@@ -78,14 +79,19 @@ public class MainViewController {
             this.mainView.showMessage(null, "Please select a job application to edit.");
         }
     }
-    private void handleDeleteJobApplication(){
+
+    /**
+     * Deletes the selected job application after user confirmation.
+     */
+    private void handleDeleteJobApplication() {
         int selectedRow = mainView.getSelectedRow();
         if (selectedRow >= 0) {
             int confirm = JOptionPane.showConfirmDialog(
                     mainView.getFrame(),
                     "Are you sure you want to delete the selected job application?",
                     "Confirm Deletion",
-            JOptionPane.YES_NO_OPTION);
+                    JOptionPane.YES_NO_OPTION
+            );
             if (confirm == JOptionPane.YES_OPTION) {
                 JobApplication jobToDelete = mainView.getSelectedJobApplication();
                 if (jobToDelete != null) {
@@ -97,7 +103,11 @@ public class MainViewController {
             this.mainView.showMessage(null, "Please select a job application to delete.");
         }
     }
-    private void handleLogOut(){
+
+    /**
+     * Logs out the current user and navigates to the login view.
+     */
+    private void handleLogOut() {
         this.mainController.logOutUser();
         this.mainController.showLoginView();
     }

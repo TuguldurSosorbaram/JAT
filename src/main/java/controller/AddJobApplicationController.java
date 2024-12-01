@@ -14,9 +14,9 @@ public class AddJobApplicationController {
 
     public AddJobApplicationController(AddJobApplicationView addJobView, MainController mainController) {
         this.addJobView = addJobView;
-        this.mainController =  mainController;
-        
-        // Add action listener for the Save button
+        this.mainController = mainController;
+
+        // Set up Save button action
         addJobView.addSaveButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -24,15 +24,18 @@ public class AddJobApplicationController {
             }
         });
 
-        // Add action listener for the Cancel button
+        // Set up Cancel button action
         addJobView.addCancelButtonListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AddJobApplicationController.this.mainController.disposeAddView();
+                mainController.disposeAddView();
             }
         });
     }
 
+    /**
+     * Handles the process of saving a new job application.
+     */
     private void handleSaveJobApplication() {
         JobApplication newJob = new JobApplication(
             addJobView.getPosition(),
@@ -40,19 +43,18 @@ public class AddJobApplicationController {
             addJobView.getSalaryApproximation(),
             addJobView.getLocation(),
             addJobView.getStatus(),
-            (new java.sql.Date(addJobView.getDeadline().getTime())),
-            (new java.sql.Date(addJobView.getDateApplied().getTime())),
-            (new java.sql.Date(addJobView.getFollowUpDate().getTime())),
+            new java.sql.Date(addJobView.getDeadline().getTime()),
+            new java.sql.Date(addJobView.getDateApplied().getTime()),
+            new java.sql.Date(addJobView.getFollowUpDate().getTime()),
             addJobView.getExcitement(),
-            this.mainController.getLoggedUserId());
+            mainController.getLoggedUserId()
+        );
 
         try {
-            DatabaseHelper.addJobApplication(newJob); // Save to database
-            this.mainController.disposeAddView(); // Close the add form
+            DatabaseHelper.addJobApplication(newJob); // Save the job application to the database
+            mainController.disposeAddView(); // Close the form after saving
         } catch (SQLException ex) {
-            this.addJobView.showErrorDialog("Error saving job application.");
+            addJobView.showErrorDialog("Error saving job application."); // Notify the user of an error
         }
     }
-    
-    
 }

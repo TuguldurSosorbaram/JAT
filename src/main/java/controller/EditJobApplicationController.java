@@ -1,12 +1,8 @@
 package controller;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.DatabaseHelper;
 import model.JobApplication;
 import view.EditJobApplicationView;
-
-import javax.swing.*;
 
 public class EditJobApplicationController {
     private MainController mainController;
@@ -15,35 +11,38 @@ public class EditJobApplicationController {
 
     public EditJobApplicationController(MainController mainController, EditJobApplicationView editView, JobApplication jobApplication) {
         this.mainController = mainController;
-        this.originalJob = jobApplication; // Save the original job application
+        this.originalJob = jobApplication; // Store the original job application
         this.editView = editView;
 
-        // Pre-fill the fields in the view with the selected job's details
+        // Populate fields with the details of the selected job application
         editView.setJobApplication(originalJob);
 
-        // Add listeners for save and cancel buttons
+        // Set up listeners for Save and Cancel buttons
         editView.addSaveButtonListener(e -> handleSave());
-        editView.addCancelButtonListener(e -> this.mainController.disposeEditView());
+        editView.addCancelButtonListener(e -> mainController.disposeEditView());
     }
 
+    /**
+     * Handles saving changes to the job application.
+     */
     private void handleSave() {
         try {
-            // Get the updated job application details from the view
+            // Retrieve updated details from the view
             JobApplication updatedJob = editView.getUpdatedJobApplication();
 
-            // Preserve the original ID
+            // Retain original immutable fields
             updatedJob.setId(originalJob.getId());
             updatedJob.setDateSaved(originalJob.getDateSaved());
             updatedJob.setUserId(originalJob.getUserId());
 
-            // Update the database
+            // Update the database with the modified job application
             DatabaseHelper.updateJobApplication(updatedJob);
 
-            // Close the view after saving
-            this.mainController.disposeEditView();
-            this.editView.showDialog("Job application updated successfully.");
+            // Notify user and close the edit view
+            mainController.disposeEditView();
+            editView.showDialog("Job application updated successfully.");
         } catch (Exception ex) {
-            this.editView.showDialog("Error updating job application.");
+            editView.showDialog("Error updating job application.");
         }
     }
 }

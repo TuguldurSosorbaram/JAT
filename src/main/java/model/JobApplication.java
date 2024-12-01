@@ -2,22 +2,28 @@ package model;
 
 import java.sql.Date;
 
+/**
+ * Represents a job application with associated details such as position,
+ * company, salary, status, and important dates.
+ */
 public class JobApplication {
     private int id;
     private String position;
     private String companyName;
-    private int salaryApproximation;  // Approximated salary as a numeric value
+    private int salaryApproximation;
     private String location;
-    private String status;  // Can be represented as an Enum if you prefer a specific set of status values
-    private java.sql.Date dateSaved;
-    private java.sql.Date deadline;
-    private java.sql.Date dateApplied;
-    private java.sql.Date followUpDate;
+    private String status;
+    private Date dateSaved;
+    private Date deadline;
+    private Date dateApplied;
+    private Date followUpDate;
     private int excitement;
     private int userId;
 
-    // Constructor
-    public JobApplication(){
+    /**
+     * Default constructor initializing fields to default values.
+     */
+    public JobApplication() {
         this.id = -1;
         this.position = null;
         this.companyName = null;
@@ -28,11 +34,15 @@ public class JobApplication {
         this.deadline = null;
         this.dateApplied = null;
         this.followUpDate = null;
-        setExcitement(0);  // Ensures excitement is within range
+        setExcitement(0); // Ensures excitement is within the valid range
     }
+
+    /**
+     * Constructor to initialize all fields except id.
+     */
     public JobApplication(String position, String companyName, int salaryApproximation, String location,
-                          String status, java.sql.Date dateSaved, java.sql.Date deadline, 
-                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement, int userId) {
+                          String status, Date dateSaved, Date deadline, 
+                          Date dateApplied, Date followUpDate, int excitement, int userId) {
         this.id = -1;
         this.position = position;
         this.companyName = companyName;
@@ -43,27 +53,31 @@ public class JobApplication {
         this.deadline = deadline;
         this.dateApplied = dateApplied;
         this.followUpDate = followUpDate;
-        setExcitement(excitement);  // Ensures excitement is within range
+        setExcitement(excitement); // Ensures excitement is within the valid range
         this.userId = userId;
     }
+
+    /**
+     * Constructor to initialize fields with the current date for dateSaved.
+     */
     public JobApplication(String position, String companyName, int salaryApproximation, String location,
-                          String status, java.sql.Date deadline, 
-                          java.sql.Date dateApplied, java.sql.Date followUpDate, int excitement, int userId) {
+                          String status, Date deadline, 
+                          Date dateApplied, Date followUpDate, int excitement, int userId) {
         this.id = -1;
         this.position = position;
         this.companyName = companyName;
         this.salaryApproximation = salaryApproximation;
         this.location = location;
         this.status = status;
-        this.dateSaved = new java.sql.Date(System.currentTimeMillis());
+        this.dateSaved = new Date(System.currentTimeMillis());
         this.deadline = deadline;
         this.dateApplied = dateApplied;
         this.followUpDate = followUpDate;
-        setExcitement(excitement);  // Ensures excitement is within range
+        setExcitement(excitement); // Ensures excitement is within the valid range
         this.userId = userId;
     }
 
-    // Getters and Setters
+    // Getters and setters for each field
     public int getId() {
         return id;
     }
@@ -71,6 +85,7 @@ public class JobApplication {
     public void setId(int id) {
         this.id = id;
     }
+
     public String getPosition() {
         return position;
     }
@@ -146,19 +161,20 @@ public class JobApplication {
     public int getExcitement() {
         return excitement;
     }
+
+    public void setExcitement(int excitement) {
+        // Ensures excitement rating is between 0 and 5
+        if (excitement < 0 || excitement > 5) {
+            throw new IllegalArgumentException("Excitement rating must be between 0 and 5.");
+        }
+        this.excitement = excitement;
+    }
+
     public int getUserId() {
         return userId;
     }
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public void setExcitement(int excitement) {
-        // Ensuring excitement rating is between 0 and 5
-        if (excitement < 0 || excitement > 5) {
-            throw new IllegalArgumentException("Excitement rating must be between 0 and 5.");
-        }
-        this.excitement = excitement;
     }
 }

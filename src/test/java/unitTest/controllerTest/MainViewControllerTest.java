@@ -180,7 +180,7 @@ class MainViewControllerTest {
             captor.getValue().actionPerformed(mockEvent);
 
             // Assert: Verify error handling
-            verify(mockMainView).showMessage(null, "Failed to update excitement in the database.");
+            verify(mockMainView).showMessage(null, "Failed to update the database.");
         }
     }
 
