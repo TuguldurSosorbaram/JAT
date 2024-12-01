@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: unitTest.modelTest.DatabaseHelperTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.434 s -- in unitTest.modelTest.DatabaseHelperTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.065 s -- in unitTest.modelTest.DatabaseHelperTest

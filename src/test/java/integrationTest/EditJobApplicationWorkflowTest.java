@@ -20,13 +20,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.mockito.ArgumentCaptor;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-
-
+/**
+ * Integration tests for the Edit Job Application workflow.
+ * Covers scenarios such as saving updates and canceling edits.
+ */
 public class EditJobApplicationWorkflowTest {
     private Connection connection;
     private MainView mockMainView;
@@ -35,6 +34,11 @@ public class EditJobApplicationWorkflowTest {
     private EditJobApplicationView editJobView;
     private EditJobApplicationController editController;
 
+    /**
+     * Sets up an in-memory SQLite database and mocks dependencies before each test.
+     *
+     * @throws SQLException if there is an error setting up the database.
+     */
     @BeforeEach
     public void setUp() throws SQLException {
         // Setup in-memory database
@@ -51,6 +55,11 @@ public class EditJobApplicationWorkflowTest {
         
     }
 
+    /**
+     * Cleans up the database connection after each test.
+     *
+     * @throws SQLException if there is an error closing the database connection.
+     */
     @AfterEach
     void tearDown() throws SQLException {
         SQLiteConnection.connect().close(); // Close the test connection
@@ -59,8 +68,15 @@ public class EditJobApplicationWorkflowTest {
         }
         SQLiteConnection.clearTestConnection(); // Clear the test mode
     }
+
+    /**
+     * Tests saving changes to a job application.
+     *
+     * @throws SQLException if there is an error interacting with the database.
+     */
     @Test
-    public void testAddJobApplication() throws SQLException{
+    public void testAddJobApplication() throws SQLException {
+        // Arrange
         JobApplication job = new JobApplication();
         job.setPosition("Position");
         job.setCompanyName("Company");
@@ -69,40 +85,50 @@ public class EditJobApplicationWorkflowTest {
         job.setStatus("saved");
         job.setExcitement(2);
         job.setUserId(1);
-        
+
         DatabaseHelper.addJobApplication(job);
-        
+
         List<JobApplication> jobs = DatabaseHelper.getJobApplicationsByUser(1);
         JobApplication jobToEdit = jobs.get(0);
-        
-        editController = new EditJobApplicationController(mockMainController, editJobView,jobToEdit);
-        
+
+        editController = new EditJobApplicationController(mockMainController, editJobView, jobToEdit);
+
+        // Capture the save button's action listener
         ArgumentCaptor<ActionListener> captor = ArgumentCaptor.forClass(ActionListener.class);
         verify(editJobView).addSaveButtonListener(captor.capture());
-        
-        JobApplication Updatedjob = new JobApplication();
-        Updatedjob.setPosition("Updated Position");
-        Updatedjob.setCompanyName("Updated Company");
-        Updatedjob.setSalaryApproximation(1234);
-        Updatedjob.setLocation("Updated Location");
-        Updatedjob.setStatus("saved");
-        Updatedjob.setExcitement(2);
-        Updatedjob.setUserId(1);
-        
-        when(editJobView.getUpdatedJobApplication()).thenReturn(Updatedjob);
 
+        // Updated job details
+        JobApplication updatedJob = new JobApplication();
+        updatedJob.setPosition("Updated Position");
+        updatedJob.setCompanyName("Updated Company");
+        updatedJob.setSalaryApproximation(1234);
+        updatedJob.setLocation("Updated Location");
+        updatedJob.setStatus("saved");
+        updatedJob.setExcitement(2);
+        updatedJob.setUserId(1);
+
+        when(editJobView.getUpdatedJobApplication()).thenReturn(updatedJob);
+
+        // Act
         ActionEvent mockEvent = mock(ActionEvent.class);
         captor.getValue().actionPerformed(mockEvent);
         jobs = DatabaseHelper.getJobApplicationsByUser(1);
-        
+
+        // Assert
         verify(mockMainController).disposeEditView();
         assertEquals(1, jobs.size());
         assertEquals("Updated Position", jobs.get(0).getPosition());
         assertEquals("Updated Company", jobs.get(0).getCompanyName());
     }
-    
+
+    /**
+     * Tests canceling an edit operation.
+     *
+     * @throws SQLException if there is an error interacting with the database.
+     */
     @Test
-    public void testCancelButton() throws SQLException{
+    public void testCancelButton() throws SQLException {
+        // Arrange
         JobApplication job = new JobApplication();
         job.setPosition("Position");
         job.setCompanyName("Company");
@@ -111,23 +137,25 @@ public class EditJobApplicationWorkflowTest {
         job.setStatus("saved");
         job.setExcitement(2);
         job.setUserId(1);
-        
+
         DatabaseHelper.addJobApplication(job);
-        
+
         List<JobApplication> jobs = DatabaseHelper.getJobApplicationsByUser(1);
         JobApplication jobToEdit = jobs.get(0);
-        
-        editController = new EditJobApplicationController(mockMainController, editJobView,jobToEdit);
-        
+
+        editController = new EditJobApplicationController(mockMainController, editJobView, jobToEdit);
+
+        // Capture the cancel button's action listener
         ArgumentCaptor<ActionListener> captor = ArgumentCaptor.forClass(ActionListener.class);
         verify(editJobView).addCancelButtonListener(captor.capture());
 
+        // Act
         ActionEvent mockEvent = mock(ActionEvent.class);
         captor.getValue().actionPerformed(mockEvent);
         jobs = DatabaseHelper.getJobApplicationsByUser(1);
-        
+
+        // Assert
         verify(mockMainController).disposeEditView();
         assertEquals(1, jobs.size());
     }
-    
 }

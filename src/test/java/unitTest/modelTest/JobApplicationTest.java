@@ -2,22 +2,30 @@ package unitTest.modelTest;
 
 import model.JobApplication;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.Date;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the JobApplication class, verifying constructors, getters, setters, and validation logic.
+ */
 class JobApplicationTest {
 
     private JobApplication jobApplication;
 
+    /**
+     * Sets up a new instance of JobApplication before each test.
+     */
     @BeforeEach
     void setUp() {
         jobApplication = new JobApplication(); // Default constructor
     }
+
+    /**
+     * Verifies that the default constructor initializes fields to their default values.
+     */
     @Test
     void testDefaultConstructor() {
         assertEquals(-1, jobApplication.getId());
@@ -33,6 +41,10 @@ class JobApplicationTest {
         assertEquals(0, jobApplication.getExcitement());
         assertEquals(0, jobApplication.getUserId());
     }
+
+    /**
+     * Tests the constructor that requires dateSaved to be explicitly provided.
+     */
     @Test
     void testConstructorWithDateSaved() {
         Date now = new Date(System.currentTimeMillis());
@@ -50,6 +62,10 @@ class JobApplicationTest {
         assertEquals(3, job.getExcitement());
         assertEquals(1, job.getUserId());
     }
+
+    /**
+     * Tests the constructor that does not require dateSaved, verifying it sets dateSaved to the current date.
+     */
     @Test
     void testConstructorWithoutDateSaved() {
         Date now = new Date(System.currentTimeMillis());
@@ -67,6 +83,10 @@ class JobApplicationTest {
         assertEquals(4, job.getExcitement());
         assertEquals(2, job.getUserId());
     }
+
+    /**
+     * Tests all getter and setter methods for correctness.
+     */
     @Test
     void testGettersAndSetters() {
         jobApplication.setId(10);
@@ -106,6 +126,10 @@ class JobApplicationTest {
         jobApplication.setUserId(1);
         assertEquals(1, jobApplication.getUserId());
     }
+
+    /**
+     * Tests valid values for the excitement rating.
+     */
     @Test
     void testSetExcitementValid() {
         jobApplication.setExcitement(0);
@@ -117,6 +141,10 @@ class JobApplicationTest {
         jobApplication.setExcitement(5);
         assertEquals(5, jobApplication.getExcitement());
     }
+
+    /**
+     * Tests invalid values for the excitement rating, verifying exceptions are thrown.
+     */
     @Test
     void testSetExcitementInvalid() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> jobApplication.setExcitement(-1));

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="unitTest.viewTest.LoginViewTest" time="0.324" tests="3" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="unitTest.viewTest.LoginViewTest" time="0.483" tests="3" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="20"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -16,9 +16,9 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk-20\bin"/>
-    <property name="sun.java.command" value="C:\Users\sutu0\AppData\Local\Temp\surefire4171672364827836363\surefirebooter-20241201203924623_3.jar C:\Users\sutu0\AppData\Local\Temp\surefire4171672364827836363 2024-12-01T20-39-24_466-jvmRun1 surefire-20241201203924623_1tmp surefire_0-20241201203924623_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\sutu0\AppData\Local\Temp\surefire10581263701886104698\surefirebooter-20241201212322698_3.jar C:\Users\sutu0\AppData\Local\Temp\surefire10581263701886104698 2024-12-01T21-23-22_409-jvmRun1 surefire-20241201212322698_1tmp surefire_0-20241201212322698_2tmp"/>
     <property name="jdk.debug" value="release"/>
-    <property name="test" value="unitTest.controllerTest.**.*Test,unitTest.modelTest.**.*Test,unitTest.viewTest.**.*Test"/>
+    <property name="test" value="integrationTest.**.*Test,unitTest.controllerTest.**.*Test,unitTest.modelTest.**.*Test,unitTest.viewTest.**.*Test"/>
     <property name="surefire.test.class.path" value="C:\Users\sutu0\Desktop\JAT\target\test-classes;C:\Users\sutu0\Desktop\JAT\target\classes;C:\Users\sutu0\.m2\repository\org\xerial\sqlite-jdbc\3.43.0.0\sqlite-jdbc-3.43.0.0.jar;C:\Users\sutu0\.m2\repository\org\junit\jupiter\junit-jupiter\5.10.0\junit-jupiter-5.10.0.jar;C:\Users\sutu0\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.10.0\junit-jupiter-api-5.10.0.jar;C:\Users\sutu0\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\sutu0\.m2\repository\org\junit\platform\junit-platform-commons\1.10.0\junit-platform-commons-1.10.0.jar;C:\Users\sutu0\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\sutu0\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.10.0\junit-jupiter-params-5.10.0.jar;C:\Users\sutu0\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.10.0\junit-jupiter-engine-5.10.0.jar;C:\Users\sutu0\.m2\repository\org\junit\platform\junit-platform-engine\1.10.0\junit-platform-engine-1.10.0.jar;C:\Users\sutu0\.m2\repository\org\mockito\mockito-core\5.5.0\mockito-core-5.5.0.jar;C:\Users\sutu0\.m2\repository\net\bytebuddy\byte-buddy\1.14.6\byte-buddy-1.14.6.jar;C:\Users\sutu0\.m2\repository\net\bytebuddy\byte-buddy-agent\1.14.6\byte-buddy-agent-1.14.6.jar;C:\Users\sutu0\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\sutu0\.m2\repository\org\mockito\mockito-inline\5.2.0\mockito-inline-5.2.0.jar;C:\Users\sutu0\.m2\repository\org\mindrot\jbcrypt\0.4\jbcrypt-0.4.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\sutu0"/>
@@ -32,7 +32,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\sutu0\AppData\Local\Temp\surefire4171672364827836363\surefirebooter-20241201203924623_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\sutu0\AppData\Local\Temp\surefire10581263701886104698\surefirebooter-20241201212322698_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="20.0.2+9-78"/>
@@ -61,7 +61,7 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="64.0"/>
   </properties>
-  <testcase name="testGetPassword" classname="unitTest.viewTest.LoginViewTest" time="0.271"/>
-  <testcase name="testViewVisibilityControls" classname="unitTest.viewTest.LoginViewTest" time="0.032"/>
-  <testcase name="testGetUsername" classname="unitTest.viewTest.LoginViewTest" time="0.018"/>
+  <testcase name="testGetPassword" classname="unitTest.viewTest.LoginViewTest" time="0.409"/>
+  <testcase name="testViewVisibilityControls" classname="unitTest.viewTest.LoginViewTest" time="0.037"/>
+  <testcase name="testGetUsername" classname="unitTest.viewTest.LoginViewTest" time="0.033"/>
 </testsuite>

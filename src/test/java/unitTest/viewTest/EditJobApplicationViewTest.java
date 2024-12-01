@@ -8,19 +8,29 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import view.EditJobApplicationView;
 
+/**
+ * Unit tests for the EditJobApplicationView class.
+ */
 public class EditJobApplicationViewTest {
     private EditJobApplicationView view;
 
+    /**
+     * Initializes the EditJobApplicationView instance before each test.
+     */
     @BeforeEach
     public void setUp() {
         view = new EditJobApplicationView(new JFrame());
-        view.hideView(); 
+        view.hideView(); // Ensure the dialog is not visible by default
     }
 
+    /**
+     * Tests the setJobApplication method to ensure the UI fields are correctly populated with job data.
+     */
     @Test
     public void testSetJobApplication() {
         JobApplication job = new JobApplication(
@@ -38,6 +48,7 @@ public class EditJobApplicationViewTest {
 
         view.setJobApplication(job);
 
+        // Access private fields for testing
         JTextField positionField = (JTextField) TestUtils.getPrivateField(view, "positionField");
         JTextField companyNameField = (JTextField) TestUtils.getPrivateField(view, "companyNameField");
         JTextField salaryField = (JTextField) TestUtils.getPrivateField(view, "salaryApproxField");
@@ -48,6 +59,7 @@ public class EditJobApplicationViewTest {
         JSpinner followUpSpinner = (JSpinner) TestUtils.getPrivateField(view, "followUpDateSpinner");
         JSpinner excitementSpinner = (JSpinner) TestUtils.getPrivateField(view, "excitementSpinner");
 
+        // Assert field values
         assertEquals("Software Engineer", positionField.getText());
         assertEquals("TechCorp", companyNameField.getText());
         assertEquals("80000", salaryField.getText());
@@ -59,8 +71,12 @@ public class EditJobApplicationViewTest {
         assertEquals(4, excitementSpinner.getValue());
     }
 
+    /**
+     * Tests the getUpdatedJobApplication method to ensure it returns a JobApplication object with the correct data.
+     */
     @Test
     public void testGetUpdatedJobApplication() {
+        // Access private fields to simulate user input
         JTextField positionField = (JTextField) TestUtils.getPrivateField(view, "positionField");
         JTextField companyNameField = (JTextField) TestUtils.getPrivateField(view, "companyNameField");
         JTextField salaryField = (JTextField) TestUtils.getPrivateField(view, "salaryApproxField");
@@ -71,6 +87,7 @@ public class EditJobApplicationViewTest {
         JSpinner followUpSpinner = (JSpinner) TestUtils.getPrivateField(view, "followUpDateSpinner");
         JSpinner excitementSpinner = (JSpinner) TestUtils.getPrivateField(view, "excitementSpinner");
 
+        // Set test values
         positionField.setText("Manager");
         companyNameField.setText("ExampleCorp");
         salaryField.setText("70000");
@@ -81,8 +98,10 @@ public class EditJobApplicationViewTest {
         followUpSpinner.setValue(Date.valueOf("2024-12-05"));
         excitementSpinner.setValue(5);
 
+        // Get the updated job application
         JobApplication updatedJob = view.getUpdatedJobApplication();
 
+        // Assert values
         assertEquals("Manager", updatedJob.getPosition());
         assertEquals("ExampleCorp", updatedJob.getCompanyName());
         assertEquals(70000, updatedJob.getSalaryApproximation());
@@ -94,6 +113,9 @@ public class EditJobApplicationViewTest {
         assertEquals(5, updatedJob.getExcitement());
     }
 
+    /**
+     * Tests the addSaveButtonListener method to verify an ActionListener is correctly attached to the save button.
+     */
     @Test
     public void testAddSaveButtonListener() {
         ActionListener mockListener = mock(ActionListener.class);
@@ -107,6 +129,9 @@ public class EditJobApplicationViewTest {
         verify(mockListener, times(1)).actionPerformed(any(ActionEvent.class));
     }
 
+    /**
+     * Tests the addCancelButtonListener method to verify an ActionListener is correctly attached to the cancel button.
+     */
     @Test
     public void testAddCancelButtonListener() {
         ActionListener mockListener = mock(ActionListener.class);
@@ -120,6 +145,9 @@ public class EditJobApplicationViewTest {
         verify(mockListener, times(1)).actionPerformed(any(ActionEvent.class));
     }
 
+    /**
+     * Tests the view lifecycle methods (hideView and disposeView) for proper dialog behavior.
+     */
     @Test
     public void testViewLifecycleControls() {
         JDialog dialog = (JDialog) TestUtils.getPrivateField(view, "dialog");
@@ -130,6 +158,4 @@ public class EditJobApplicationViewTest {
         view.disposeView();
         assertFalse(dialog.isDisplayable(), "Dialog should no longer be displayable after calling disposeView()");
     }
-
 }
-

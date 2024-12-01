@@ -15,18 +15,29 @@ import org.mockito.MockedStatic;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for RegistrationController, covering all edge cases for user registration.
+ */
 class RegistrationControllerTest {
+
     private RegistrationView mockView;
     private MainController mockMainController;
     private RegistrationController controller;
 
+    /**
+     * Sets up the test environment by mocking the view and controller and initializing the RegistrationController.
+     */
     @BeforeEach
     void setUp() {
         mockView = mock(RegistrationView.class);
         mockMainController = mock(MainController.class);
         controller = new RegistrationController(mockView, mockMainController);
-        controller.enableTestMode();
+        controller.enableTestMode(); // Enable test mode for controlled validation
     }
+
+    /**
+     * Tests the registration process with valid inputs and verifies the expected behavior.
+     */
     @Test
     void testHandleRegistration() {
         // Arrange: Mock valid user input
@@ -53,6 +64,10 @@ class RegistrationControllerTest {
             mockedDatabaseHelper.verify(() -> DatabaseHelper.registerUser("ValidUser", "ValidPass1@"));
         }
     }
+
+    /**
+     * Tests the validation of invalid usernames, including various error conditions.
+     */
     @Test
     void testInvalidUsername() {
         // Arrange: Set invalid username (starts with a digit)
@@ -89,6 +104,9 @@ class RegistrationControllerTest {
         verify(mockMainController, never()).showLoginView(); // Should not navigate
     }
 
+    /**
+     * Tests the validation of invalid passwords, including different error conditions.
+     */
     @Test
     void testInvalidPassword() {
         // Arrange: Set invalid password (missing special character)
@@ -132,6 +150,10 @@ class RegistrationControllerTest {
         verify(mockView, never()).setUsernameError(anyString()); // No username errors
         verify(mockMainController, never()).showLoginView(); // Should not navigate
     }
+
+    /**
+     * Tests behavior when attempting to register a username that already exists in the database.
+     */
     @Test
     void testUsernameAlreadyExists() {
         when(mockView.getUsername()).thenReturn("ExistingUser");
@@ -154,6 +176,10 @@ class RegistrationControllerTest {
             verify(mockMainController, never()).showLoginView(); // Should not proceed
         }
     }
+
+    /**
+     * Tests the behavior when a registration attempt fails due to a database error.
+     */
     @Test
     void testRegistrationFailure() {
         // Arrange: Simulate database error

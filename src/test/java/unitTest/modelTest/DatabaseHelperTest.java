@@ -14,9 +14,17 @@ import model.JobApplication;
 import model.User;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Unit tests for the DatabaseHelper class, verifying functionality for user and job application management.
+ */
 public class DatabaseHelperTest {
+
     private Connection connection;
-    
+
+    /**
+     * Sets up an in-memory SQLite database before each test and initializes the database schema.
+     */
     @BeforeEach
     void setUp() throws SQLException {
         // Use in-memory SQLite database for testing
@@ -27,11 +35,18 @@ public class DatabaseHelperTest {
         DatabaseHelper.initializeDatabase();
     }
 
+    /**
+     * Closes the test database connection and clears the test mode after each test.
+     */
     @AfterEach
     void tearDown() throws SQLException {
         SQLiteConnection.connect().close(); // Close the test connection
         SQLiteConnection.clearTestConnection(); // Clear the test mode
     }
+
+    /**
+     * Tests adding a user and validating their credentials.
+     */
     @Test
     void testAddAndValidateUser() throws SQLException {
         // Arrange
@@ -45,6 +60,10 @@ public class DatabaseHelperTest {
         assertFalse(DatabaseHelper.validateUser("testUser", "wrongPassword"));
         assertFalse(DatabaseHelper.validateUser("unknownUser", "testPassword"));
     }
+
+    /**
+     * Tests registering a user and handling duplicate registrations.
+     */
     @Test
     void testRegisterUser() throws SQLException {
         // Act
@@ -55,6 +74,10 @@ public class DatabaseHelperTest {
         assertTrue(registered);
         assertFalse(duplicate);
     }
+
+    /**
+     * Tests adding a job application for a user and verifying the stored data.
+     */
     @Test
     void testAddJobApplication() throws SQLException {
         // Arrange
@@ -82,6 +105,10 @@ public class DatabaseHelperTest {
         assertEquals(4, savedJob.getExcitement());
         assertEquals(userId, savedJob.getUserId());
     }
+
+    /**
+     * Tests updating an existing job application and verifying the updated data.
+     */
     @Test
     void testUpdateJobApplication() throws SQLException {
         // Arrange
@@ -112,7 +139,11 @@ public class DatabaseHelperTest {
         assertEquals(70000, updatedJob.getSalaryApproximation());
         assertEquals(5, updatedJob.getExcitement());
     }
-     @Test
+
+    /**
+     * Tests retrieving the user ID by username and verifying it handles unknown usernames correctly.
+     */
+    @Test
     void testGetUserIdByUsername() throws SQLException {
         // Arrange
         DatabaseHelper.registerUser("uniqueUser", "securePassword");
@@ -125,5 +156,4 @@ public class DatabaseHelperTest {
         assertTrue(userId > 0);
         assertEquals(-1, unknownId);
     }
-    
 }

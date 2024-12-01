@@ -4,8 +4,14 @@ import model.User;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the User class, focusing on password hashing, validation, and constructor behavior.
+ */
 class UserTest {
 
+    /**
+     * Tests that the password hashing method produces a non-null and different value from the plain password.
+     */
     @Test
     void testHashPassword() {
         String plainPassword = "securePassword123";
@@ -16,6 +22,9 @@ class UserTest {
         assertNotEquals(plainPassword, hashedPassword, "Hashed password should not match the plain password");
     }
 
+    /**
+     * Tests that the password validation method correctly validates a valid password against its hashed equivalent.
+     */
     @Test
     void testCheckPasswordValid() {
         String plainPassword = "securePassword123";
@@ -25,6 +34,9 @@ class UserTest {
         assertTrue(User.checkPassword(plainPassword, hashedPassword), "The plain password should match the hashed password");
     }
 
+    /**
+     * Tests that the password validation method correctly rejects an invalid password.
+     */
     @Test
     void testCheckPasswordInvalid() {
         String plainPassword = "securePassword123";
@@ -35,6 +47,9 @@ class UserTest {
         assertFalse(User.checkPassword(wrongPassword, hashedPassword), "The wrong password should not match the hashed password");
     }
 
+    /**
+     * Tests that the User constructor correctly hashes the password and sets the username.
+     */
     @Test
     void testUserConstructorHashing() {
         String plainPassword = "securePassword123";

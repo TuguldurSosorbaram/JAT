@@ -3,21 +3,27 @@ package integrationTest;
 import org.junit.jupiter.api.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import model.DatabaseHelper;
 import model.JobApplication;
 import model.User;
-
-import static org.junit.jupiter.api.Assertions.*;
 import utils.SQLiteConnection;
 
-public class DatabaseCrudIntegrationTest {
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Integration tests for CRUD operations on the database.
+ * Ensures correct behavior for creating, reading, updating, and deleting job applications.
+ */
+public class DatabaseCrudIntegrationTest {
     private Connection connection;
 
+    /**
+     * Sets up an in-memory SQLite database and initializes the schema before each test.
+     *
+     * @throws SQLException if there is an error setting up the database.
+     */
     @BeforeEach
     public void setUp() throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite::memory:");
@@ -25,6 +31,11 @@ public class DatabaseCrudIntegrationTest {
         DatabaseHelper.initializeDatabase();
     }
 
+    /**
+     * Cleans up the database connection after each test.
+     *
+     * @throws SQLException if there is an error closing the database connection.
+     */
     @AfterEach
     void tearDown() throws SQLException {
         SQLiteConnection.connect().close(); // Close the test connection
@@ -34,8 +45,12 @@ public class DatabaseCrudIntegrationTest {
         SQLiteConnection.clearTestConnection(); // Clear the test mode
     }
 
+    /**
+     * Tests the creation of a job application in the database.
+     */
     @Test
     public void testCreateJobApplication() throws SQLException {
+        // Arrange
         User user = new User("jobUser", "password123");
         DatabaseHelper.addUser(user);
         int userId = DatabaseHelper.getUserIdByUsername("jobUser");
@@ -49,7 +64,7 @@ public class DatabaseCrudIntegrationTest {
         DatabaseHelper.addJobApplication(job);
         List<JobApplication> jobs = DatabaseHelper.getJobApplicationsByUser(userId);
 
-
+        // Assert
         assertEquals(1, jobs.size());
         JobApplication savedJob = jobs.get(0);
         assertEquals("Developer", savedJob.getPosition());
@@ -61,6 +76,9 @@ public class DatabaseCrudIntegrationTest {
         assertEquals(userId, savedJob.getUserId());
     }
 
+    /**
+     * Tests reading multiple job applications for a user from the database.
+     */
     @Test
     public void testReadJobApplications() throws SQLException {
         // Arrange
@@ -81,10 +99,12 @@ public class DatabaseCrudIntegrationTest {
         assertEquals(2, jobs.size());
     }
 
+    /**
+     * Tests updating a job application's status in the database.
+     */
     @Test
     public void testUpdateJobApplication() throws SQLException {
         // Arrange
-        // Create a job application and update its status
         User user = new User("jobUser", "password123");
         DatabaseHelper.addUser(user);
         int userId = DatabaseHelper.getUserIdByUsername("jobUser");
@@ -103,6 +123,9 @@ public class DatabaseCrudIntegrationTest {
         assertEquals("Interview", updatedJob.getStatus());
     }
 
+    /**
+     * Tests deleting a job application from the database.
+     */
     @Test
     public void testDeleteJobApplication() throws SQLException {
         // Arrange
@@ -115,11 +138,9 @@ public class DatabaseCrudIntegrationTest {
         DatabaseHelper.addJobApplication(job);
 
         // Act
-        List<JobApplication> jobs = DatabaseHelper.getJobApplicationsByUser(userId);
-        
-        
         DatabaseHelper.deleteJobApplication(job);
-        jobs = DatabaseHelper.getJobApplicationsByUser(userId);
+        List<JobApplication> jobs = DatabaseHelper.getJobApplicationsByUser(userId);
+
         // Assert
         assertEquals(0, jobs.size());
     }

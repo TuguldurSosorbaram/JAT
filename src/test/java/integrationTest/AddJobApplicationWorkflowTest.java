@@ -20,12 +20,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.mockito.ArgumentCaptor;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-
+/**
+ * Integration tests for the Add Job Application workflow.
+ * Tests various scenarios including single-user and multi-user job application additions and cancellation of the process.
+ */
 public class AddJobApplicationWorkflowTest {
     private Connection connection;
     private MainView mockMainView;
@@ -34,6 +34,11 @@ public class AddJobApplicationWorkflowTest {
     private AddJobApplicationView addJobView;
     private AddJobApplicationController addController;
 
+    /**
+     * Sets up an in-memory SQLite database and mocks required dependencies before each test.
+     *
+     * @throws SQLException if there is an error setting up the database.
+     */
     @BeforeEach
     public void setUp() throws SQLException {
         // Setup in-memory database
@@ -46,10 +51,15 @@ public class AddJobApplicationWorkflowTest {
 
         // Initialize MainController
         mockMainController = mock(MainController.class);
-        mainController = new MainViewController(mockMainView,mockMainController);
+        mainController = new MainViewController(mockMainView, mockMainController);
         addController = new AddJobApplicationController(addJobView, mockMainController);
     }
 
+    /**
+     * Cleans up the database connection after each test.
+     *
+     * @throws SQLException if there is an error closing the database connection.
+     */
     @AfterEach
     void tearDown() throws SQLException {
         SQLiteConnection.connect().close(); // Close the test connection
@@ -58,18 +68,21 @@ public class AddJobApplicationWorkflowTest {
         }
         SQLiteConnection.clearTestConnection(); // Clear the test mode
     }
+
+    /**
+     * Tests adding a job application for a single user.
+     */
     @Test
-    public void testAddJobApplication(){
-        
+    public void testAddJobApplication() {
         ArgumentCaptor<ActionListener> captor = ArgumentCaptor.forClass(ActionListener.class);
         verify(mockMainView).addAddButtonListener(captor.capture());
-        
+
         ActionEvent mockEvent = mock(ActionEvent.class);
         captor.getValue().actionPerformed(mockEvent);
-        
+
         ArgumentCaptor<ActionListener> captor1 = ArgumentCaptor.forClass(ActionListener.class);
         verify(addJobView).addSaveButtonListener(captor1.capture());
-        
+
         when(addJobView.getPosition()).thenReturn("Software Engineer");
         when(addJobView.getCompanyName()).thenReturn("Tech Company");
         when(addJobView.getSalaryApproximation()).thenReturn(100000);
@@ -81,27 +94,29 @@ public class AddJobApplicationWorkflowTest {
         when(addJobView.getExcitement()).thenReturn(4);
         when(mockMainController.getLoggedUserId()).thenReturn(1);
 
-        
         captor1.getValue().actionPerformed(mockEvent);
-        
+
         verify(mockMainController).disposeAddView();
         List<JobApplication> jobs = DatabaseHelper.getJobApplicationsByUser(1);
 
         // Assert
         assertEquals(1, jobs.size());
     }
+
+    /**
+     * Tests adding job applications for multiple users.
+     */
     @Test
-    public void testAddJobApplicationMultipleUser(){
-        
+    public void testAddJobApplicationMultipleUser() {
         ArgumentCaptor<ActionListener> captor = ArgumentCaptor.forClass(ActionListener.class);
         verify(mockMainView).addAddButtonListener(captor.capture());
-        
+
         ActionEvent mockEvent = mock(ActionEvent.class);
         captor.getValue().actionPerformed(mockEvent);
-        
+
         ArgumentCaptor<ActionListener> captor1 = ArgumentCaptor.forClass(ActionListener.class);
         verify(addJobView).addSaveButtonListener(captor1.capture());
-        
+
         when(addJobView.getPosition()).thenReturn("Software Engineer");
         when(addJobView.getCompanyName()).thenReturn("Tech Company");
         when(addJobView.getSalaryApproximation()).thenReturn(100000);
@@ -113,15 +128,15 @@ public class AddJobApplicationWorkflowTest {
         when(addJobView.getExcitement()).thenReturn(4);
         when(mockMainController.getLoggedUserId()).thenReturn(1);
 
-        
         captor1.getValue().actionPerformed(mockEvent);
-        
+
         verify(mockMainController).disposeAddView();
         List<JobApplication> jobs = DatabaseHelper.getJobApplicationsByUser(1);
 
         // Assert
         assertEquals(1, jobs.size());
-        
+
+        // Test for a second user
         captor.getValue().actionPerformed(mockEvent);
         reset(addJobView);
         when(addJobView.getPosition()).thenReturn("Software Engineer");
@@ -135,12 +150,16 @@ public class AddJobApplicationWorkflowTest {
         when(addJobView.getExcitement()).thenReturn(4);
         when(mockMainController.getLoggedUserId()).thenReturn(2);
         captor1.getValue().actionPerformed(mockEvent);
+
         jobs = DatabaseHelper.getJobApplicationsByUser(2);
 
         // Assert
         assertEquals(1, jobs.size());
-        
     }
+
+    /**
+     * Tests canceling the addition of a job application.
+     */
     @Test
     public void testCancelAddJobApplication() {
         ArgumentCaptor<ActionListener> captor = ArgumentCaptor.forClass(ActionListener.class);

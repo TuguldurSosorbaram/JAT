@@ -12,18 +12,16 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.MockedStatic;
 
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.mockito.Mockito.*;
 
-
+/**
+ * Unit tests for the EditJobApplicationController class.
+ */
 class EditJobApplicationControllerTest {
 
     private EditJobApplicationView mockView;
@@ -31,6 +29,9 @@ class EditJobApplicationControllerTest {
     private JobApplication mockJobApplication;
     private EditJobApplicationController controller;
 
+    /**
+     * Sets up mocks and dependencies before each test.
+     */
     @BeforeEach
     void setUp() {
         // Mock dependencies
@@ -57,6 +58,10 @@ class EditJobApplicationControllerTest {
         controller = new EditJobApplicationController(mockMainController, mockView, mockJobApplication);
     }
 
+    /**
+     * Tests saving a job application successfully.
+     * Verifies that the database is updated, and the view is disposed without errors.
+     */
     @Test
     void testSaveJobApplicationSuccessfully() throws Exception {
         // Arrange: Mock the updated job application
@@ -80,7 +85,6 @@ class EditJobApplicationControllerTest {
         when(mockView.getUpdatedJobApplication()).thenReturn(updatedJob);
 
         try (MockedStatic<DatabaseHelper> mockedDatabaseHelper = Mockito.mockStatic(DatabaseHelper.class)) {
-            
             // Act: Trigger save action
             ArgumentCaptor<ActionListener> captor = ArgumentCaptor.forClass(ActionListener.class);
             verify(mockView).addSaveButtonListener(captor.capture());
@@ -93,6 +97,11 @@ class EditJobApplicationControllerTest {
             verify(mockView, never()).showDialog("Error updating job application");
         }
     }
+
+    /**
+     * Tests error handling during a failed database update.
+     * Verifies that the view stays open and an error message is displayed.
+     */
     @Test
     void testSaveJobApplicationDatabaseError() throws Exception {
         // Arrange: Mock the updated job application
@@ -132,6 +141,11 @@ class EditJobApplicationControllerTest {
             verify(mockView).showDialog("Error updating job application."); // Verify error dialog is shown
         }
     }
+
+    /**
+     * Tests canceling the edit action.
+     * Verifies that the view is disposed.
+     */
     @Test
     void testCancelActionDisposesView() {
         // Act: Trigger cancel action
@@ -143,5 +157,4 @@ class EditJobApplicationControllerTest {
         // Assert: Verify the view is disposed
         verify(mockMainController).disposeEditView();
     }
-
 }
