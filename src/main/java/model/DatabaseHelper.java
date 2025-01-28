@@ -10,6 +10,7 @@ import utils.SQLiteConnection;
  * DatabaseHelper provides methods to manage database interactions, including 
  * initialization, user management, and CRUD operations for job applications.
  */
+//hello
 public class DatabaseHelper {
     
      /**

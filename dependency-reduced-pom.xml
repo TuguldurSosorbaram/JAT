@@ -26,6 +26,11 @@
                   </excludes>
                 </filter>
               </filters>
+              <transformers>
+                <transformer>
+                  <mainClass>${exec.mainClass}</mainClass>
+                </transformer>
+              </transformers>
             </configuration>
           </execution>
         </executions>
